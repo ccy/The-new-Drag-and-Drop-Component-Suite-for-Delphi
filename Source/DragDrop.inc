@@ -1,10 +1,14 @@
 // -----------------------------------------------------------------------------
-// Project:         Drag and Drop Component Suite
-// Module:          DragDrop.inc
-// Description:     This include file contains common defines used by the
-//                  library.
+// Project:         New Drag and Drop Component Suite
+// Module:          DragDrop
+// Description:     Implements base classes and utility functions.
+// Version:         5.3
+// Date:            13-AUG-2013
+// Target:          Win32, Delphi 5-XE4
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
-// Copyright        © 1997-2010 Anders Melander
+// Copyright        © 1997-1999 Angus Johnson & Anders Melander
+//                  © 2000-2010 Anders Melander
+//                  © 2011-2013 Sven Harazim
 // -----------------------------------------------------------------------------
 
 
@@ -139,6 +143,12 @@
   {$DEFINE VER_OK}
 {$ENDIF}
 
+// Delphi XE4
+{$IFDEF VER250}
+  {$DEFINE VER25_PLUS}
+  {$DEFINE VER_OK}
+{$ENDIF}
+
 // Unknown compiler version - assume D2009 compatible for Unicode or D2007 for Ansi
 {$IFNDEF VER_OK}
   {$ifdef UNICODE}
@@ -150,6 +160,9 @@
   {$UNDEF VER_OK}
 {$ENDIF}
 
+{$IFDEF VER25_PLUS}
+  {$DEFINE VER24_PLUS}
+{$ENDIF}
 {$IFDEF VER24_PLUS}
   {$DEFINE VER23_PLUS}
 {$ENDIF}

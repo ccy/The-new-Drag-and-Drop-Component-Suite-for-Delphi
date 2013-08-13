@@ -1,14 +1,15 @@
 unit DragDrop;
 // -----------------------------------------------------------------------------
-// Project:         Drag and Drop Component Suite
+// Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.2
-// Date:            17-AUG-2010
-// Target:          Win32, Delphi 5-2010
+// Version:         5.3
+// Date:            13-AUG-2013
+// Target:          Win32, Delphi 5-XE4
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
 //                  © 2000-2010 Anders Melander
+//                  © 2011-2013 Sven Harazim
 // -----------------------------------------------------------------------------
 // TODO -oanme -cPortability : Replace all public use of HWND with THandle. BCB's HWND <> Delphi's HWND.
 
@@ -2463,7 +2464,7 @@ begin
       @_CopyStgMedium := GetProcAddress(URLMONDLL, 'CopyStgMedium');
   end;
 
-  if (@_CopyStgMedium = nil) then
+  if not Assigned(@_CopyStgMedium) then
     raise Exception.Create(sNoCopyStgMedium);
 
   Result := (Succeeded(_CopyStgMedium(SrcMedium, DstMedium)));

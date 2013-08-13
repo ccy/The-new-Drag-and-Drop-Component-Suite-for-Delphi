@@ -1,4 +1,4 @@
-package DragDropDXE3;
+package DragDropDXE4;
 
 {$R *.res}
 {$R '..\Source\DragDrop.dcr'}

@@ -1,14 +1,15 @@
 unit DragDropInternet;
 // -----------------------------------------------------------------------------
-// Project:         Drag and Drop Component Suite.
-// Module:          DragDropInternet
-// Description:     Implements Dragging and Dropping of internet related data.
-// Version:         5.2
-// Date:            17-AUG-2010
-// Target:          Win32, Delphi 5-2010
+// Project:         New Drag and Drop Component Suite
+// Module:          DragDrop
+// Description:     Implements base classes and utility functions.
+// Version:         5.3
+// Date:            13-AUG-2013
+// Target:          Win32, Delphi 5-XE4
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
 //                  © 2000-2010 Anders Melander
+//                  © 2011-2013 Sven Harazim
 // -----------------------------------------------------------------------------
 
 interface
@@ -1444,15 +1445,15 @@ begin
     MAPI32 := SafeLoadLibrary(MAPI32DLL);
     if (MAPI32 <= HINSTANCE_ERROR) then
       raise Exception.CreateFmt('%s: %s', [SysErrorMessage(GetLastError), MAPI32DLL]);
-    GetProc('MAPIGetDefaultMalloc@0', @MAPIGetDefaultMalloc);
-    GetProc('MAPIInitialize', @MAPIInitialize);
-    GetProc('MAPIUninitialize', @MAPIUninitialize);
-    GetProc('MAPIAllocateBuffer', @MAPIAllocateBuffer);
-    GetProc('MAPIAllocateMore', @MAPIAllocateMore);
-    GetProc('MAPIFreeBuffer', @MAPIFreeBuffer);
-    GetProc('OpenIMsgOnIStg@44', @OpenIMsgOnIStg);
-    GetProc('OpenIMsgSession@12', @OpenIMsgSession);
-    GetProc('CloseIMsgSession@4', @CloseIMsgSession);
+    @MAPIGetDefaultMalloc := GetProcAddress(MAPI32, 'MAPIGetDefaultMalloc@0');
+    @MAPIInitialize := GetProcAddress(MAPI32, 'MAPIInitialize');
+    @MAPIUninitialize:= GetProcAddress(MAPI32, 'MAPIUninitialize');
+    @MAPIAllocateBuffer:= GetProcAddress(MAPI32, 'MAPIAllocateBuffer');
+    @MAPIAllocateMore := GetProcAddress(MAPI32, 'MAPIAllocateMore');
+    @MAPIFreeBuffer := GetProcAddress(MAPI32, 'MAPIFreeBuffer');
+    @OpenIMsgOnIStg := GetProcAddress(MAPI32, 'OpenIMsgOnIStg@44');
+    @OpenIMsgSession := GetProcAddress(MAPI32, 'OpenIMsgSession@12');
+    @CloseIMsgSession := GetProcAddress(MAPI32, 'CloseIMsgSession@4');
   end;
 end;
 
@@ -1550,9 +1551,15 @@ begin
 
     // Get IMessage from IStorage
     OleCheck(OpenIMsgOnIStg(FSession,
+    {$IFDEF VER25_PLUS} //CompilerVersion >= 25.0
+      Pointer(@MAPIAllocateBuffer),
+      Pointer(@MAPIAllocateMore),
+      Pointer(@MAPIFreeBuffer),
+    {$ELSE}
       @MAPIAllocateBuffer,
       @MAPIAllocateMore,
       @MAPIFreeBuffer,
+    {$ENDIF}
       IMalloc(MapiGetDefaultMalloc),
       nil,
       FStorages[Index],

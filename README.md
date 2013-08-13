@@ -26,7 +26,7 @@ Table of Contents:
 1. Supported platforms:
 -------------------------------------------
 This version of the library has been tested with Delphi 5, Delphi 7, Delphi 2007,
-Delphi 2009, Delphi 2010, Delphi XE, Delphi XE2, Delphi XE3
+Delphi 2009, Delphi 2010, Delphi XE, Delphi XE2, Delphi XE3, Delphi XE4
 
 
 -------------------------------------------
