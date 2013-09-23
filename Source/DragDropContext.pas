@@ -21,7 +21,7 @@ uses
   Menus,
   ShlObj,
   ActiveX,
-  Messages,
+  Messages,{$IF CompilerVersion >= 25.0}AnsiStrings,{$IFEND}
   Classes;
 
 {$INCLUDE DragDrop.inc}
@@ -248,7 +248,7 @@ begin
         // return ANSI help string for menu item.
         begin
           sAnsi := AnsiString(MenuItem.Hint);
-          StrLCopy(pszName, PAnsiChar(sAnsi), cchMax);
+          {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrLCopy(pszName, PAnsiChar(sAnsi), cchMax);
         end;
 
       GCS_HELPTEXTW:

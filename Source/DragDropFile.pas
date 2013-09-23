@@ -21,7 +21,7 @@ uses
   DragDropText,
   ShlObj,
   ActiveX,
-  Windows,
+  Windows,{$IF CompilerVersion >= 25.0}AnsiStrings,{$IFEND}
   Classes;
 
 {$include DragDrop.inc}
@@ -1585,7 +1585,7 @@ begin
       end else
       begin
         s := Files[i];
-        StrPLCopy(p, AnsiString(s), Size);
+        {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrPLCopy(p, AnsiString(s), Size);
         StringSize := Length(s)+1;
       end;
       inc(p, StringSize);
@@ -2061,7 +2061,7 @@ begin
   if (Index >= Count) then
     raise Exception.CreateFmt('Filename index out of bounds (%d)', [Index]);
   SetLength(s, MAX_PATH);
-  StrLCopy(PAnsiChar(s), @FileGroupDescriptor^.fgd[Index].cFileName[0], MAX_PATH);
+  {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrLCopy(PAnsiChar(s), @FileGroupDescriptor^.fgd[Index].cFileName[0], MAX_PATH);
   Result := PAnsiChar(s);
 end;
 {$IFDEF R_PLUS}
@@ -2084,7 +2084,7 @@ procedure TAnsiFileGroupDescriptorClipboardFormat.SetAnsiFilename(Index: integer
 begin
   if (Index >= Count) then
     raise Exception.CreateFmt('Filename index out of bounds (%d)', [Index]);
-  StrPLCopy(@FileGroupDescriptor^.fgd[Index].cFileName[0], Value, MAX_PATH);
+  {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrPLCopy(@FileGroupDescriptor^.fgd[Index].cFileName[0], Value, MAX_PATH);
 end;
 {$IFDEF R_PLUS}
   {$RANGECHECKS ON}

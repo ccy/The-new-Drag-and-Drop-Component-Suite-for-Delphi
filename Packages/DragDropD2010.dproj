@@ -2,7 +2,7 @@
 		<PropertyGroup>
 			<ProjectGuid>{DA670E20-1A51-4D6C-8D38-DDB72348B362}</ProjectGuid>
 			<MainSource>DragDropD2010.dpk</MainSource>
-			<Config Condition="'$(Config)'==''">Release</Config>
+			<Config Condition="'$(Config)'==''">Debug</Config>
 			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
 			<ProjectVersion>12.0</ProjectVersion>
 		</PropertyGroup>
@@ -143,7 +143,7 @@
 						<VersionInfoKeys Name="LegalCopyright"/>
 						<VersionInfoKeys Name="LegalTrademarks"/>
 						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
-						<VersionInfoKeys Name="Last Compile">2013-08-13 22:39</VersionInfoKeys>
+						<VersionInfoKeys Name="Last Compile">2013-09-23 09:06</VersionInfoKeys>
 					</VersionInfoKeys>
 					<Excluded_Packages>
 						<Excluded_Packages Name="$(BDS)\bin\dcloffice2k140.bpl">Microsoft Office 2000 Beispiele für gekapselte Komponenten für Automation Server</Excluded_Packages>
