@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 236
   Top = 162
   Caption = 'Simple Source Demo'
-  ClientHeight = 258
+  ClientHeight = 273
   ClientWidth = 387
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -29,7 +29,7 @@ object Form1: TForm1
   end
   object Panel2: TPanel
     Left = 0
-    Top = 217
+    Top = 232
     Width = 387
     Height = 41
     Align = alBottom
@@ -55,7 +55,7 @@ object Form1: TForm1
     Left = 0
     Top = 38
     Width = 387
-    Height = 179
+    Height = 194
     Align = alClient
     Columns = <
       item
@@ -73,13 +73,13 @@ object Form1: TForm1
     DragTypes = [dtCopy, dtMove, dtLink]
     OnGetDragImage = DropFileSource1GetDragImage
     ShowImage = True
-    Left = 355
-    Top = 224
+    Left = 83
+    Top = 72
   end
   object DropDummy1: TDropDummy
     DragTypes = []
     Target = Owner
-    Left = 276
-    Top = 224
+    Left = 20
+    Top = 72
   end
 end
