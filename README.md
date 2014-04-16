@@ -20,7 +20,6 @@ Table of Contents:
 2. Installation
 3. Uninstallation
 4. Known problems
-5. Support and feedback
 
 
 -------------------------------------------
