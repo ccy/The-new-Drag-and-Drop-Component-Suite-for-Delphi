@@ -2,19 +2,20 @@
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.3
-// Date:            13-AUG-2013
-// Target:          Win32, Delphi 5-XE4
+// Version:         5.5
+// Date:            16-APR-2014
+// Target:          Win32, Delphi 5-XE6
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
+// Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
 //                  © 2000-2010 Anders Melander
-//                  © 2011-2013 Sven Harazim
+//                  © 2011-2014 Sven Harazim
 // -----------------------------------------------------------------------------
 
 
 // -----------------------------------------------------------------------------
 //                      Detect compiler version
-//                      Supports D1 - D2010, Win32
+//                      Supports D1 - DXE6, Win32
 // -----------------------------------------------------------------------------
 
 // Delphi 1.x
@@ -155,6 +156,12 @@
   {$DEFINE VER_OK}
 {$ENDIF}
 
+// Delphi XE6
+{$IFDEF VER270}
+  {$DEFINE VER27_PLUS}
+  {$DEFINE VER_OK}
+{$ENDIF}
+
 // Unknown compiler version - assume D2009 compatible for Unicode or D2007 for Ansi
 {$IFNDEF VER_OK}
   {$ifdef UNICODE}
@@ -166,6 +173,9 @@
   {$UNDEF VER_OK}
 {$ENDIF}
 
+{$IFDEF VER27_PLUS}
+  {$DEFINE VER26_PLUS}
+{$ENDIF}
 {$IFDEF VER26_PLUS}
   {$DEFINE VER25_PLUS}
 {$ENDIF}

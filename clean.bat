@@ -1,3 +1,5 @@
+del /q /s *.dcu
+del /q /s *.exe
 del /q /s *.cbk
 del /q /s *.drc
 del /q /s *.dsk

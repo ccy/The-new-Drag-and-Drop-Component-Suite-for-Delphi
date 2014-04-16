@@ -7,10 +7,11 @@ from
 Anders Melander
 http://melander.dk/delphi/dragdrop/
 
-The new Drag and Drop Component Suite Version 5.4
-Released 23-sep-2013
+The new Drag and Drop Component Suite Version 5.5
+Released 14-apr-2014
 © 1997-2010 Anders Melander
-© 2011-2013 Sven Harazim
+© 2011-2014 Sven Harazim
+https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 
 -------------------------------------------
 Table of Contents:
@@ -26,7 +27,8 @@ Table of Contents:
 1. Supported platforms:
 -------------------------------------------
 This version of the library has been tested with Delphi 5, Delphi 7, Delphi 2007,
-Delphi 2009, Delphi 2010, Delphi XE, Delphi XE2, Delphi XE3, Delphi XE4, Delphi XE5
+Delphi 2009, Delphi 2010, Delphi XE, Delphi XE2, Delphi XE3, Delphi XE4, Delphi XE5,
+Delphi XE6
 
 
 -------------------------------------------
