@@ -4,7 +4,7 @@
         <MainSource>DragDropDXE3.dpk</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Release</Config>
-        <TargetedPlatforms>1</TargetedPlatforms>
+        <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Package</AppType>
         <FrameworkType>None</FrameworkType>
         <ProjectVersion>14.4</ProjectVersion>
@@ -20,6 +20,11 @@
     </PropertyGroup>
     <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
         <Base_Win32>true</Base_Win32>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
+        <Base_Win64>true</Base_Win64>
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
@@ -70,7 +75,13 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_Namespace>Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <DCC_Namespace>Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <DCC_DebugInformation>false</DCC_DebugInformation>
@@ -95,24 +106,11 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="..\Source\DragDrop.dcr"/>
-        <DCCReference Include="..\Source\DragDropContext.dcr"/>
-        <DCCReference Include="..\Source\DragDropFile.dcr"/>
-        <DCCReference Include="..\Source\DragDropGraphics.dcr"/>
-        <DCCReference Include="..\Source\DragDropHandler.dcr"/>
-        <DCCReference Include="..\Source\DragDropInternet.dcr"/>
-        <DCCReference Include="..\Source\DragDropPIDL.dcr"/>
-        <DCCReference Include="..\Source\DragDropText.dcr"/>
-        <DCCReference Include="..\Source\DropComboTarget.dcr"/>
-        <DCCReference Include="..\Source\DropHandler.dcr"/>
-        <DCCReference Include="..\Source\DropSource.dcr"/>
-        <DCCReference Include="..\Source\DropTarget.dcr"/>
-        <DCCReference Include="designide.dcp"/>
         <DCCReference Include="rtl.dcp"/>
+        <DCCReference Include="vcl.dcp"/>
         <DCCReference Include="..\Source\DragDrop.pas"/>
         <DCCReference Include="..\Source\DragDropComObj.pas"/>
         <DCCReference Include="..\Source\DragDropContext.pas"/>
-        <DCCReference Include="..\Source\DragDropDesign.pas"/>
         <DCCReference Include="..\Source\DragDropFile.pas"/>
         <DCCReference Include="..\Source\DragDropFormats.pas"/>
         <DCCReference Include="..\Source\DragDropGraphics.pas"/>
@@ -187,7 +185,7 @@
             <Platforms>
                 <Platform value="OSX32">False</Platform>
                 <Platform value="Win32">True</Platform>
-                <Platform value="Win64">False</Platform>
+                <Platform value="Win64">True</Platform>
             </Platforms>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
