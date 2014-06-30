@@ -26,6 +26,7 @@ package DragDropDXE5;
 {$DEFINE RELEASE}
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'Drag and Drop Component Suite'}
+{$RUNONLY}
 {$IMPLICITBUILD OFF}
 
 requires
