@@ -36,7 +36,7 @@ uses
   DragDropPIDL,
   DragDropText,
   DropComboTarget,
-{$ifndef VER14_PLUS}
+{$IF CompilerVersion < 6.0}
   DsgnIntf,
 {$else}
   DesignIntf,

@@ -102,29 +102,29 @@ type
 
     function InvokeCommand(var lpici: TCMInvokeCommandInfo): HResult; stdcall;
 
-    {$IFDEF VER23_PLUS}
+    {$IF CompilerVersion >= 16.0}
     function GetCommandString(idCmd: UINT_PTR; uFlags: UINT; pwReserved: PUINT;
       pszName: LPSTR; cchMax: UINT): HResult; stdcall;
- 	{$ELSE}
+  	{$ELSE}
     function GetCommandString(idCmd, uType: UINT; pwReserved: PUINT;
       pszName: LPSTR; cchMax: UINT): HResult; stdcall;
     {$ENDIF}
 
     { IContextMenu2 }
-    {$IFDEF VER23_PLUS}
+    {$IF CompilerVersion >= 16.0}
     function HandleMenuMsg(uMsg: UINT; WParam: WPARAM; LParam: LPARAM): HResult; stdcall;
     {$ELSE}
     function HandleMenuMsg(uMsg: UINT; WParam, LParam: Integer): HResult; stdcall;
-	{$ENDIF}
+    {$ENDIF}
 
     { IContextMenu3 }
-    {$IFDEF VER23_PLUS}
+    {$IF CompilerVersion >= 16.0}
     function HandleMenuMsg2(uMsg: UINT; wParam: WPARAM; lParam: LPARAM;
       var lpResult: LRESULT): HResult; stdcall;
- 	{$ELSE}
+    {$ELSE}
     function HandleMenuMsg2(uMsg: UINT; wParam, lParam: Integer;
       var lpResult: Integer): HResult; stdcall;
- 	{$ENDIF}
+    {$ENDIF}
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -190,7 +190,7 @@ uses
 
 function IsLine(Item: TMenuItem): boolean;
 begin
-{$IFDEF VER13_PLUS}
+{$IF CompilerVersion >= 16.0}
   Result := Item.IsLine;
 {$ELSE}
   Result := Item.Caption = '-';
@@ -218,7 +218,7 @@ begin
   inherited Destroy;
 end;
 
-{$IFDEF VER23_PLUS}    // Delphi XE2
+{$IF CompilerVersion >= 16.0}    // Delphi XE2
 function TDropContextMenu.GetCommandString(idCmd: UINT_PTR; uFlags: UINT; pwReserved: PUINT;
   pszName: LPSTR; cchMax: UINT): HResult; stdcall;
 {$ELSE}
@@ -241,7 +241,7 @@ begin
   if (MenuItem <> nil) then
   begin
     Result := S_OK;
- 	{$IFDEF VER23_PLUS}     // Delphi XE2
+ 	  {$IF CompilerVersion >= 16.0}     // Delphi XE2
     case uFlags of
     {$ELSE}
     case uType of
@@ -548,7 +548,7 @@ begin
     NextMenuID - FMenuOffset);
 end;
 
-{$IFDEF VER23_PLUS}        // Delphi XE2
+{$IF CompilerVersion >= 16.0}        // Delphi XE2
 function TDropContextMenu.HandleMenuMsg(uMsg: UINT; WParam: WPARAM; LParam: LPARAM): HResult;
 var
   lpResult: LRESULT;
@@ -564,7 +564,7 @@ begin
   Result := HandleMenuMsg2(uMsg, WParam, LParam, lpResult);
 end;
 
-{$IFDEF VER23_PLUS}
+{$IF CompilerVersion >= 16.0}
 function TDropContextMenu.HandleMenuMsg2(uMsg: UINT; wParam: WPARAM; lParam: LPARAM; var lpResult: LRESULT): HResult;
 {$ELSE}
 function TDropContextMenu.HandleMenuMsg2(uMsg: UINT; wParam, lParam: Integer; var lpResult: Integer): HResult;
@@ -670,7 +670,7 @@ begin
   end;
 end;
 
-{$IFNDEF VER13_PLUS}
+{$IF CompilerVersion < 5.0}
 type
   TComponentCracker = class(TComponent);
 {$ENDIF}
@@ -679,7 +679,7 @@ procedure TDropContextMenu.SetContextMenu(const Value: TPopupMenu);
 begin
   if (Value <> FContextMenu) then
   begin
-{$IFDEF VER13_PLUS}
+{$IF CompilerVersion >= 5.0}
     if (FContextMenu <> nil) then
       FContextMenu.RemoveFreeNotification(Self);
 {$ELSE}
@@ -897,13 +897,13 @@ end;
 
 type
   TMenuItemCracker = class(TMenuItem);
-{$IFNDEF VER13_PLUS}
+{$IF CompilerVersion < 5.0}
   TOwnerDrawState = set of (odSelected, odGrayed, odDisabled, odChecked,
     odFocused, odDefault, odHotLight, odInactive, odNoAccel, odNoFocusRect,
     odReserved1, odReserved2, odComboBoxEdit);
 {$ENDIF}
 
-{$IFNDEF VER13_PLUS}
+{$IF CompilerVersion < 5.0}
 
 function GetMenuFont: HFONT;
 var
@@ -947,7 +947,7 @@ begin
       SaveIndex := SaveDC(DrawItemStruct.hDC);
       try
         Canvas.Handle := DrawItemStruct.hDC;
-{$IFDEF VER13_PLUS}
+{$IF CompilerVersion >= 5.0}
         Canvas.Font := Screen.MenuFont;
 {$ELSE}
         Canvas.Font.Handle := GetMenuFont;
@@ -1001,7 +1001,7 @@ begin
         if ((MenuItem.Parent <> nil) and (MenuItem.Parent.Parent = nil)) and
           not ((MenuItem.GetParentMenu <> nil) and
           (MenuItem.GetParentMenu.OwnerDraw or (MenuItem.GetParentMenu.Images <> nil)) and
-{$IFDEF VER13_PLUS}
+{$IF CompilerVersion >= 5.0}
           (Assigned(MenuItem.OnAdvancedDrawItem) or Assigned(MenuItem.OnDrawItem))) then
 {$ELSE}
           (Assigned(MenuItem.OnDrawItem))) then
@@ -1011,14 +1011,14 @@ begin
 
           // Work around: ImageList images are drawn with different rules...
           // I'm not really sure for which versions of Delphi this is necessary.
-{$IFNDEF VER15_PLUS}
+{$IF CompilerVersion < 7.0}
           if (MenuItem.GetParentMenu.Images = nil) or (MenuItem.ImageIndex = -1) then
             Inc(DrawItemStruct.rcItem.Left, 8);
 {$ENDIF}
         end;
 
         // TODO : Unless menu item is ownerdraw we should handle the draw internally instead of relying on TMenuItem's draw code.
-{$IFDEF VER13_PLUS}
+{$IF CompilerVersion >= 5.0}
         // Because the VCL draws menu items different from standard shell menu
         // items, we need to manually handle the drawing of the bitmap and
         // positioning of the text relative to the bitmap.
@@ -1132,7 +1132,7 @@ begin
         SaveIndex := SaveDC(DC);
         try
           Canvas.Handle := DC;
-{$IFDEF VER13_PLUS}
+{$IF CompilerVersion >= 5.0}
           Canvas.Font := Screen.MenuFont;
 {$ELSE}
           Canvas.Font.Handle := GetMenuFont;

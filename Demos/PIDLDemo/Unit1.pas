@@ -5,7 +5,7 @@ interface
 {$include dragdrop.inc} // Disables .NET warnings
 
 uses
-{$ifdef VER18_PLUS}
+{$IF CompilerVersion >= 10.0}
   Types, // Required for inlining of ListView_CreateDragImage
 {$endif}
   DragDrop,

@@ -32,10 +32,10 @@ uses
   Classes;
 
 {$include DragDrop.inc}
-{$ifdef VER135_PLUS}
+{$IF CompilerVersion >= 5.0}{$IFDEF BCB}
 // shldisp.h only exists in C++Builder 5 and later.
 {$HPPEMIT '#include <shldisp.h>'}
-{$endif}
+{$endif}{$endif}
 
 type
   // These have been disabled since they break the generated C++ headers.
@@ -438,7 +438,7 @@ type
   public
     constructor Create(ADropSource: TCustomDropSource);
     destructor Destroy; override;
-{$ifndef VER21_PLUS}
+{$IF CompilerVersion < 14.0}
     procedure Start;
 {$endif}
     property DragResult: TDragResult read FDragResult;
@@ -584,7 +584,7 @@ begin
   end;
 end;
 
-{$ifndef VER21_PLUS}
+{$IF CompilerVersion < 14.0}
 procedure TDropSourceThread.Start;
 begin
   Resume;

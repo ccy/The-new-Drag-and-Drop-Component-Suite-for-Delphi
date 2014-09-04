@@ -20,10 +20,10 @@ uses
   Windows, ActiveX, Classes, Controls, CommCtrl, ExtCtrls, Forms;
 
 {$include DragDrop.inc}
-{$ifdef VER135_PLUS}
+{$IF CompilerVersion >= 5.0}{$IFDEF BCB}
 // shldisp.h only exists in C++Builder 5 and later.
 {$HPPEMIT '#include <shldisp.h>'}
-{$endif}
+{$endif}{$endif}
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -64,7 +64,7 @@ type
 type
   TScrollDirection = (sdUp, sdDown, sdLeft, sdRight);
   TScrollDirections = set of TScrollDirection;
-  TScrolDirections = TScrollDirections {$ifdef VER17_PLUS}deprecated{$endif};
+  TScrolDirections = TScrollDirections {$IF CompilerVersion >= 9.0}deprecated{$endif};
 
   TDropTargetScrollEvent = procedure(Sender: TObject; Point: TPoint;
     var Scroll: TScrollDirections; var Interval: integer) of object;
@@ -80,7 +80,7 @@ type
   end;
 
 {$ifdef BCB}
-{$ifndef VER145_PLUS}
+{$IF CompilerVersion < 6.0}
 {$hppemit '// Hack to trick C++Builder 4/5 into using a default value for the Unregister methods parameter' }
 {$hppemit '#define ATarget_with_default ATarget = NULL' }
 {$endif}
@@ -222,7 +222,7 @@ type
 // Replaced by the TCustomDropTarget class.
 ////////////////////////////////////////////////////////////////////////////////
   TDropTarget = class(TCustomDropTarget)
-  end {$ifdef VER17_PLUS}deprecated {$IFDEF VER20_PLUS}'Use TCustomDropTarget instead'{$ENDIF}{$endif};
+  end {$IF CompilerVersion >= 9.0}deprecated {$IF CompilerVersion >= 12.0}'Use TCustomDropTarget instead'{$ENDIF}{$endif};
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -884,7 +884,7 @@ type
     constructor Create(ADropTarget: TCustomDropTarget;
       const ADataObject: IDataObject; AEffect: Longint);
     destructor Destroy; override;
-{$ifndef VER21_PLUS}
+{$IF CompilerVersion < 14.0}
     procedure Start;
 {$endif}
     property DropTarget: TCustomDropTarget read FDropTarget;
@@ -957,7 +957,7 @@ begin
   end;
 end;
 
-{$ifndef VER21_PLUS}
+{$IF CompilerVersion < 14.0}
 procedure TDropTargetTransferThread.Start;
 begin
   Resume;

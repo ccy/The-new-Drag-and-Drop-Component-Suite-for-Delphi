@@ -140,7 +140,7 @@ end;
 function DeleteEmptyRegKey(Key: string; DeleteTree: boolean = True): Boolean;
 var
   SubKey: HKey;
-  NumSubKeys, NumValues: {$IFDEF VER25_PLUS}CppULongInt{$ELSE}DWORD{$ENDIF};
+  NumSubKeys, NumValues: {$IF CompilerVersion >= 18.0}CppULongInt{$ELSE}DWORD{$ENDIF};
   p: PChar;
 begin
   p := nil;

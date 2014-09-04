@@ -248,7 +248,7 @@ type
     property Filename: UnicodeString read GetText write SetText;
   end;
 
-  TFilenameWClipboardFormat = TUnicodeFilenameClipboardFormat {$ifdef VER17_PLUS}deprecated {$IFDEF VER20_PLUS}'Use TUnicodeFilenameClipboardFormat instead'{$ENDIF}{$endif};
+  TFilenameWClipboardFormat = TUnicodeFilenameClipboardFormat {$IF CompilerVersion >= 9.0}deprecated {$IFDEF VER20_PLUS}'Use TUnicodeFilenameClipboardFormat instead'{$ENDIF}{$endif};
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -303,7 +303,7 @@ type
     property FileMaps: TUnicodeStrings read FFileMaps;
   end;
 
-  TFilenameMapWClipboardFormat = TUnicodeFilenameMapClipboardFormat {$ifdef VER17_PLUS}deprecated {$IFDEF VER20_PLUS}'Use TUnicodeFilenameMapClipboardFormat instead'{$ENDIF}{$endif};
+  TFilenameMapWClipboardFormat = TUnicodeFilenameMapClipboardFormat {$IF CompilerVersion >= 9.0}deprecated {$IFDEF VER20_PLUS}'Use TUnicodeFilenameMapClipboardFormat instead'{$ENDIF}{$endif};
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -447,7 +447,7 @@ type
     property Filenames[Index: integer]: UnicodeString read GetUnicodeFilename write SetUnicodeFilename;
   end;
 
-  TFileGroupDescriptorWClipboardFormat = TUnicodeFileGroupDescriptorClipboardFormat {$ifdef VER17_PLUS}deprecated {$IFDEF VER20_PLUS}'Use TUnicodeFileGroupDescriptorClipboardFormat instead'{$ENDIF}{$endif};
+  TFileGroupDescriptorWClipboardFormat = TUnicodeFileGroupDescriptorClipboardFormat {$IF CompilerVersion >= 9.0}deprecated {$IF CompilerVersion >= 12.0}'Use TUnicodeFileGroupDescriptorClipboardFormat instead'{$ENDIF}{$endif};
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -673,7 +673,7 @@ function WriteFilesToZeroList(Data: pointer; Size: integer;
 implementation
 
 uses
-{$ifdef VER14_PLUS}
+{$IF CompilerVersion >= 6.0}
   RTLConsts,
 {$else}
   Consts,
@@ -682,7 +682,7 @@ uses
   ComObj,
   SysUtils;
 
-{$ifndef VER14_PLUS}
+{$IF CompilerVersion < 6.0}
 const
   sLineBreak = #13#10;
 {$endif}

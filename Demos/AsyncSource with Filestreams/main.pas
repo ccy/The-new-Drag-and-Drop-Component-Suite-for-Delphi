@@ -10,11 +10,11 @@ uses
   IdExplicitTLSClientServerBase, IdFTP,
   Messages, Dialogs,
   ActiveX, Windows, Classes, Controls, Forms, StdCtrls, ComCtrls, ExtCtrls,
-  Buttons, ImgList, ToolWin, ActnList;
+  Buttons, ImgList, ToolWin, ActnList, System.Actions;
 
 {$include DragDrop.inc}
 
-{$ifdef VER20_PLUS}
+{$IF CompilerVersion >= 12.0}
 // Work around for interface breaking changes between different Indy 10 releases... Pffft!
 type
   TIndyWorkCountInt = int64;

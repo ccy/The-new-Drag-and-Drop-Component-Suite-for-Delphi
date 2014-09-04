@@ -49,7 +49,6 @@ object Form1: TForm1
       Top = 10
       Width = 150
       Height = 13
-      Margins.Bottom = 0
       Caption = #169'1997-99 Johnson && Melander'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText

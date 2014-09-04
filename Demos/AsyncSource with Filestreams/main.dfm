@@ -46,9 +46,9 @@ object FormMain: TFormMain
   end
   object ListViewFiles: TListView
     Left = 0
-    Top = 92
+    Top = 94
     Width = 573
-    Height = 250
+    Height = 248
     Align = alClient
     Columns = <
       item
@@ -80,7 +80,7 @@ object FormMain: TFormMain
     Left = 0
     Top = 0
     Width = 573
-    Height = 92
+    Height = 94
     AutoSize = True
     Bands = <
       item
@@ -107,9 +107,9 @@ object FormMain: TFormMain
         Width = 567
       end>
     object ToolBarMain: TToolBar
-      Left = 12
+      Left = 11
       Top = 34
-      Width = 553
+      Width = 558
       Height = 30
       AutoSize = True
       ButtonHeight = 30
@@ -183,9 +183,9 @@ object FormMain: TFormMain
       Transparent = False
     end
     object ComboAddress: TComboBox
-      Left = 59
+      Left = 60
       Top = 66
-      Width = 506
+      Width = 509
       Height = 21
       TabOrder = 2
       OnCloseUp = ComboAddressCloseUp
@@ -2081,10 +2081,12 @@ object FormMain: TFormMain
   end
   object IdFTP1: TIdFTP
     IPVersion = Id_IPv4
-    AutoLogin = True
     Passive = True
     Password = 'homer@simpson.org'
     Username = 'anonymous'
+    NATKeepAlive.UseKeepAlive = False
+    NATKeepAlive.IdleTimeMS = 0
+    NATKeepAlive.IntervalMS = 0
     ProxySettings.ProxyType = fpcmNone
     ProxySettings.Port = 0
     ReadTimeout = 30000

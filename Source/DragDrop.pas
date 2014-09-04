@@ -19,7 +19,7 @@ interface
 {$include DragDrop.inc}
 
 uses
-{$ifndef VER17_PLUS}
+{$IF CompilerVersion < 9.0}
   Graphics,
 {$endif}
   Classes,
@@ -28,31 +28,31 @@ uses
   ActiveX;
 
 
-{$ifdef VER135_PLUS}
+{$IF CompilerVersion >= 5.0}{$IFDEF BCB}
 // shldisp.h only exists in C++Builder 5 and later.
 {$HPPEMIT '#include <shldisp.h>'}
-{$endif}
+{$endif}{$endif}
 
 {$HPPEMIT '#ifndef NO_WIN32_LEAN_AND_MEAN'}
 {$HPPEMIT '#error The NO_WIN32_LEAN_AND_MEAN symbol must be defined in your projects conditional defines'}
 {$HPPEMIT '#endif'}
 
-{$ifndef VER12_PLUS}
-// Fix for C++Builder 3.
-{$HPPEMIT '#define TPoint tagPOINT'}
-{$endif}
+//{$ifndef VER12_PLUS}
+//// Fix for C++Builder 3.
+//{$HPPEMIT '#define TPoint tagPOINT'}
+//{$endif}
 
-{$ifdef VER135_PLUS}
+{$IF CompilerVersion >= 5.0}{$IFDEF BCB}
 // Fix for BCB5
 // Needed since "FAsyncDropSource: IDropSource" in TCustomDropSource becomes
 // "_di_IDropSource FAsyncDropSource".
 {$HPPEMIT 'typedef System::DelphiInterface<IDropSource> _di_IDropSource;'}
-{$endif}
+{$endif}{$endif}
 
 {_$HPPEMIT 'typedef System::DelphiInterface<IDragSourceHelper> _di_IDragSourceHelper;'}
-{$ifndef VER135_PLUS}
+{$IF CompilerVersion < 5.0}{$IFDEF BCB}
 {_$HPPEMIT 'typedef System::DelphiInterface<IAsyncOperation> _di_IAsyncOperation;'}
-{$endif}
+{$endif}{$endif}
 {_$HPPEMIT 'typedef System::DelphiInterface<IDropTargetHelper> _di_IDropTargetHelper;'}
 {_$HPPEMIT 'typedef System::DelphiInterface<IDragSourceHelper> _di_IDragSourceHelper;'}
 
@@ -77,7 +77,7 @@ type
 {$endif}
 
 // Pre D2005 compatibility
-{$ifndef VER17_PLUS}
+{$IF CompilerVersion < 9.0}
 type
   TBitmap = class(Graphics.TBitmap)
   public
@@ -154,7 +154,7 @@ type
   TInterfacedComponent = class(TComponent, IUnknown)
   protected
     function QueryInterface(const IID: TGuid; out Obj): HRESULT;
-      {$IFDEF VER13_PLUS} override; {$ELSE} reintroduce; {$ENDIF} stdcall;
+      {$IF CompilerVersion >= 5.0} override; {$ELSE} reintroduce; {$ENDIF} stdcall;
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
   end;
@@ -329,7 +329,7 @@ type
     property FormatList: TDataFormats read FFormatList;
   public
     constructor Create(AOwner: TDragDropComponent);  overload; virtual;
-    constructor Create(Dummy: pointer); overload; {$ifdef VER17_PLUS}deprecated {$IFDEF VER20_PLUS}'Use Create(TDataFormatDirection) instead of Create(nil)'{$ENDIF};{$endif}
+    constructor Create(Dummy: pointer); overload; {$IF CompilerVersion >= 9.0}deprecated 'Use Create(TDataFormatDirection) instead of Create(nil)';{$endif}
     constructor Create(Direction: TDataFormatDirection); overload; virtual;
     destructor Destroy; override;
     procedure Clear; virtual; abstract;
@@ -375,7 +375,7 @@ type
     property Count: integer read GetCount;
   end;
 
-{$ifndef VER17_PLUS}
+{$IF CompilerVersion < 9.0}
   TDataFormatClassListProxy = class
   private
     class function GetItem(Index: integer): TDataFormatClass;
@@ -388,20 +388,19 @@ type
   // List of TCustomDataFormat classes.
   TDataFormatClasses = class(TObject)
   private
-    FList: TList;
-  {$ifdef VER185_PLUS}strict{$endif} private
+    FList: TList; strict private
 
     { Provides singleton access to the global data format database }
     class function Instance: TDataFormatClasses;
   protected
-    class function GetFormat(Index: integer): TDataFormatClass; {$ifdef VER17_PLUS}static;{$endif}
-    class function GetCount: integer; {$ifdef VER17_PLUS}static;{$endif}
+    class function GetFormat(Index: integer): TDataFormatClass; {$IF CompilerVersion >= 9.0}static;{$endif}
+    class function GetCount: integer; {$IF CompilerVersion >= 9.0}static;{$endif}
   public
     constructor Create;
     destructor Destroy; override;
     class function Add(DataFormat: TDataFormatClass): integer; // virtual;
     class procedure Remove(DataFormat: TDataFormatClass); // virtual;
-{$ifdef VER17_PLUS}
+{$IF CompilerVersion >= 9.0}
     class property Formats[Index: integer]: TDataFormatClass read GetFormat;
     class property Count: integer read GetCount;
 {$else}
@@ -556,20 +555,20 @@ type
 // Requires Windows 2000 or later.
 ////////////////////////////////////////////////////////////////////////////////
 const
-{$ifdef VER135_PLUS}
+{$IF CompilerVersion >= 5.0}{$IFDEF BCB}
   {_$EXTERNALSYM IID_IAsyncOperation}
-{$endif}
+{$endif}{$endif}
   IID_IAsyncOperation: TGUID = (
     D1:$3D8B0590; D2:$F691; D3:$11D2; D4:($8E,$A9,$00,$60,$97,$DF,$5B,$D4));
-{$ifdef VER135_PLUS}
+{$IF CompilerVersion >= 5.0}{$IFDEF BCB}
   {_$EXTERNALSYM SID_IAsyncOperation}
-{$endif}
+{$endif}{$endif}
   SID_IAsyncOperation = '{3D8B0590-F691-11D2-8EA9-006097DF5BD4}';
 
 type
-{$ifdef VER135_PLUS}
+{$IF CompilerVersion >= 5.0}{$IFDEF BCB}
   {_$EXTERNALSYM IAsyncOperation}
-{$endif}
+{$endif}{$endif}
   // Note:
   // IAsyncOperation is declared in C++Builder 5 and later (in shldisp.h), but
   // for some reason C++Builder can't handle that we also define it here. Not
@@ -764,11 +763,11 @@ var
 
 // The following DVASPECT constants are missing from some versions of Delphi and
 // C++Builder.
-{$ifndef VER135_PLUS}
+{$IF CompilerVersion < 5.0}
 const
-{$ifndef VER10_PLUS}
-  DVASPECT_SHORTNAME = 2; // use for CF_HDROP to get short name version of file paths
-{$endif}
+//{$ifndef VER10_PLUS}
+//  DVASPECT_SHORTNAME = 2; // use for CF_HDROP to get short name version of file paths
+//{$endif}
   DVASPECT_COPY = 3; // use to indicate format is a "Copy" of the data (FILECONTENTS, FILEDESCRIPTOR, etc)
   DVASPECT_LINK = 4; // use to indicate format is a "Shortcut" to the data (FILECONTENTS, FILEDESCRIPTOR, etc)
 {$endif}
@@ -790,20 +789,20 @@ function WStrPLCopy(Dest: PWideChar; const Source: WideString; MaxLen: Cardinal)
 //              Tiburón
 //
 ////////////////////////////////////////////////////////////////////////////////
-{$ifdef VER200}
-// TODO : Temporary
-function StringToWideChar(const Source: UnicodeString; Dest: PWideChar; DestSize: Integer): PWideChar;
-{$endif}
+//{$ifdef VER200}
+//// TODO : Temporary
+//function StringToWideChar(const Source: UnicodeString; Dest: PWideChar; DestSize: Integer): PWideChar;
+//{$endif}
+//
+//{$ifndef VER20_PLUS}
+//const
+//  CP_THREAD_ACP = 3; // current thread's ANSI code page
+//  DefaultSystemCodePage = CP_THREAD_ACP;
+//{$endif}
 
-{$ifndef VER20_PLUS}
-const
-  CP_THREAD_ACP = 3; // current thread's ANSI code page
-  DefaultSystemCodePage = CP_THREAD_ACP;
-{$endif}
-
-const
-  // AnsiString makes the linker include the string even if it isn't referenced
-  sDragDropCopyright: AnsiString = 'Drag and Drop Component Suite. Copyright © 1997-2010 Anders Melander';
+//const
+//  // AnsiString makes the linker include the string even if it isn't referenced
+//  sDragDropCopyright: AnsiString = 'Drag and Drop Component Suite. Copyright © 1997-2010 Anders Melander';
 
 
 (*******************************************************************************
@@ -838,7 +837,7 @@ resourcestring
 //              Pre D2005 support
 //
 ////////////////////////////////////////////////////////////////////////////////
-{$ifndef VER17_PLUS}
+{$IF CompilerVersion < 9.0}
 procedure TBitmap.SetSize(NewWidth, NewHeight: integer);
 begin
   Width := NewWidth;
@@ -851,13 +850,13 @@ end;
 //              Tiburón
 //
 ////////////////////////////////////////////////////////////////////////////////
-{$IFDEF VER200}
-function StringToWideChar(const Source: UnicodeString; Dest: PWideChar; DestSize: Integer): PWideChar;
-begin
-  StrPLCopy(Dest, Source, DestSize);
-  Result := Dest;
-end;
-{$ENDIF}
+//{$IFDEF VER200}
+//function StringToWideChar(const Source: UnicodeString; Dest: PWideChar; DestSize: Integer): PWideChar;
+//begin
+//  StrPLCopy(Dest, Source, DestSize);
+//  Result := Dest;
+//end;
+//{$ENDIF}
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -1626,7 +1625,7 @@ begin
   Instance.FList.Remove(DataFormat);
 end;
 
-{$ifndef VER17_PLUS}
+{$IF CompilerVersion < 9.0}
 class function TDataFormatClasses.Count: integer;
 begin
   Result := TDataFormatClasses.GetCount;
@@ -1957,7 +1956,7 @@ begin
   begin
     if not(csLoading in ComponentState) then
       Enabled := False;
-{$ifdef VER13_PLUS}
+{$IF CompilerVersion >= 5.0}
     if (FDragDropComponent <> nil) then
       FDragDropComponent.RemoveFreeNotification(Self);
 {$else}
@@ -2189,7 +2188,7 @@ end;
 ////////////////////////////////////////////////////////////////////////////////
 procedure _RaiseLastWin32Error;
 begin
-{$ifdef VER14_PLUS}
+{$IF CompilerVersion >= 6.0}
   RaiseLastOSError;
 {$else}
   RaiseLastWin32Error;
@@ -2493,11 +2492,11 @@ const
   sClipNames: array[CF_TEXT..CF_MAX-1] of string =
     ('CF_TEXT', 'CF_BITMAP', 'CF_METAFILEPICT', 'CF_SYLK', 'CF_DIF', 'CF_TIFF',
     'CF_OEMTEXT', 'CF_DIB', 'CF_PALETTE', 'CF_PENDATA', 'CF_RIFF', 'CF_WAVE',
-    'CF_UNICODETEXT', 'CF_ENHMETAFILE', 'CF_HDROP', 'CF_LOCALE'{$IFDEF VER23_PLUS}, 'CF_DIBV5'{$ENDIF});
+    'CF_UNICODETEXT', 'CF_ENHMETAFILE', 'CF_HDROP', 'CF_LOCALE'{$IF CompilerVersion >= 16.0}, 'CF_DIBV5'{$ENDIF});
 begin
   case Value of
     CF_TEXT..CF_MAX-1: Result := sClipNames[Value];
-    {$IFNDEF VER23_PLUS}17: Result := 'CF_DIBV5';{$ENDIF}
+    {$IF CompilerVersion < 16.0}17: Result := 'CF_DIBV5';{$ENDIF}
     18: Result := 'CF_MAX_XP';
     128: Result := 'CF_OWNERDISPLAY';
     129: Result := 'CF_DSPTEXT';

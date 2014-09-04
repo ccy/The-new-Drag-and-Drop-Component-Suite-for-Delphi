@@ -8,7 +8,8 @@ uses
   DragDrop, DropTarget,
   ActiveX,
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, ComCtrls, StdCtrls, ToolWin, ImgList, ActnList, Menus;
+  Dialogs, ExtCtrls, ComCtrls, StdCtrls, ToolWin, ImgList, ActnList, Menus,
+  System.Actions;
 
 const
   MAX_DATA = 32768; // Max bytes to render in preview
@@ -153,7 +154,7 @@ begin
   FDropTarget.OnDragOver := Self.OnDragOver;
   FDropTarget.OnLeave := Self.OnDragLeave;
   FDropTarget.OnGetDropEffect := Self.OnDragOver;
-{$ifdef VER18_PLUS}
+{$IF CompilerVersion >= 10.0}
   ToolBar1.DrawingStyle := dsGradient;
 {$endif}
   LoadRTF(sIntro);

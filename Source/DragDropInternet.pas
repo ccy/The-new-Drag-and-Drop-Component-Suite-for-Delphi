@@ -58,7 +58,7 @@ type
     property URL: UnicodeString read GetText write SetText;
   end;
 
-  TURLWClipboardFormat = TUnicodeURLClipboardFormat {$ifdef VER17_PLUS}deprecated {$IFDEF VER20_PLUS}'Use TURLWClipboardFormat instead'{$ENDIF}{$endif};
+  TURLWClipboardFormat = TUnicodeURLClipboardFormat {$IF CompilerVersion >= 9.0}deprecated {$IF CompilerVersion >= 12.0}'Use TURLWClipboardFormat instead'{$ENDIF}{$endif};
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -96,7 +96,7 @@ type
     procedure Clear; override;
     property URL: AnsiString read FURL write FURL;
     property Title: AnsiString read FTitle write FTitle;
-  end {$ifdef VER15_PLUS} deprecated {$endif};
+  end {$IF CompilerVersion >= 7.0} deprecated {$endif};
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -132,7 +132,7 @@ type
     property Extra: AnsiString read FExtra write FExtra;
     property Height: integer read FHeight write FHeight;
     property Width: integer read FWidth write FWidth;
-  end {$ifdef VER15_PLUS} deprecated {$endif};
+  end {$IF CompilerVersion >= 7.0} deprecated {$endif};
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -1552,7 +1552,7 @@ begin
 
     // Get IMessage from IStorage
     OleCheck(OpenIMsgOnIStg(FSession,
-    {$IFDEF VER25_PLUS} //CompilerVersion >= 25.0
+    {$IF CompilerVersion >= 18.0}
       Pointer(@MAPIAllocateBuffer),
       Pointer(@MAPIAllocateMore),
       Pointer(@MAPIFreeBuffer),

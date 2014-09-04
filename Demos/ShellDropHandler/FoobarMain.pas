@@ -70,25 +70,25 @@ resourcestring
   sUnregisterNotice = 'Remember to also unregister the drop handler DLL';
   sRegisterNotice = 'Remember to also register the drop handler DLL';
 
-{$ifndef VER13_PLUS}
-function GetRegStringValue(const Key, ValueName: string): string;
-var
-  Size: DWord;
-  RegKey: HKEY;
-begin
-  Result := '';
-  if RegOpenKey(HKEY_CLASSES_ROOT, PChar(Key), RegKey) = ERROR_SUCCESS then
-  try
-    Size := 256;
-    SetLength(Result, Size);
-    if RegQueryValueEx(RegKey, PChar(ValueName), nil, nil, PByte(PChar(Result)), @Size) = ERROR_SUCCESS then
-      SetLength(Result, Size - 1) else
-      Result := '';
-  finally
-    RegCloseKey(RegKey);
-  end;
-end;
-{$endif}
+//{$ifndef VER13_PLUS}
+//function GetRegStringValue(const Key, ValueName: string): string;
+//var
+//  Size: DWord;
+//  RegKey: HKEY;
+//begin
+//  Result := '';
+//  if RegOpenKey(HKEY_CLASSES_ROOT, PChar(Key), RegKey) = ERROR_SUCCESS then
+//  try
+//    Size := 256;
+//    SetLength(Result, Size);
+//    if RegQueryValueEx(RegKey, PChar(ValueName), nil, nil, PByte(PChar(Result)), @Size) = ERROR_SUCCESS then
+//      SetLength(Result, Size - 1) else
+//      Result := '';
+//  finally
+//    RegCloseKey(RegKey);
+//  end;
+//end;
+//{$endif}
 
 procedure TFormFileList.FormCreate(Sender: TObject);
 var

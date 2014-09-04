@@ -8,10 +8,10 @@ uses
 
 {$include 'DragDrop.inc'}
 
-{$ifndef VER13_PLUS}
-type
-  TDataModule = TForm;
-{$endif}
+//{$ifndef VER13_PLUS}
+//type
+//  TDataModule = TForm;
+//{$endif}
 
 type
   (*
@@ -125,7 +125,7 @@ procedure TDataModuleDragDropHandler.DragDropHandler1Popup(Sender: TObject);
 
   procedure ClearItem(Item: TMenuItem);
   begin
-  {$ifdef VER13_PLUS}
+  {$IF CompilerVersion >= 5.0}
     Item.Clear;
   {$else}
     while (Item.Count > 0) do

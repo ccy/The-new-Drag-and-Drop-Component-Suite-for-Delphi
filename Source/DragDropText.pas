@@ -69,7 +69,7 @@ type
     function HasData: boolean; override;
   end;
 
-  TCustomWideTextClipboardFormat = TCustomUnicodeTextClipboardFormat {$ifdef VER17_PLUS}deprecated {$IFDEF VER20_PLUS}'Use TCustomUnicodeTextClipboardFormat instead'{$ENDIF}{$endif};
+  TCustomWideTextClipboardFormat = TCustomUnicodeTextClipboardFormat {$IF CompilerVersion >= 9.0}deprecated {$IF CompilerVersion >= 12.0}'Use TCustomUnicodeTextClipboardFormat instead'{$ENDIF}{$endif};
 
 ////////////////////////////////////////////////////////////////////////////////
 //

@@ -80,7 +80,7 @@ implementation
 {$R *.DFM}
 
 uses
-{$ifdef VER18_PLUS}
+{$IF CompilerVersion >= 10.0}
   Types, // Required for inlining of ListView_CreateDragImage
 {$endif}
   SysUtils,

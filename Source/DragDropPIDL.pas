@@ -246,11 +246,11 @@ function ILIsEqual(Pidl1, Pidl2: PItemIDList): LongBool; stdcall;
 function ILCombine(Pidl1, Pidl2: PItemIDList): PItemIDList; stdcall;
 function ILGetSize(Pidl: PItemIDList): Word; stdcall;
 function ILGetNext(Pidl: PItemIDList): PItemIDList; stdcall;
-procedure ILFree(Pidl: PItemIDList); stdcall; {$ifdef VER15_PLUS} deprecated; {$endif}
+procedure ILFree(Pidl: PItemIDList); stdcall; {$IF CompilerVersion >= 7.0} deprecated; {$endif}
 
 // Undocumented IMalloc utility functions...
-function SHAlloc(BufferSize: ULONG): Pointer; stdcall; {$ifdef VER15_PLUS} deprecated; {$endif}
-procedure SHFree(Buffer: Pointer); stdcall; {$ifdef VER15_PLUS} deprecated; {$endif}
+function SHAlloc(BufferSize: ULONG): Pointer; stdcall; {$IF CompilerVersion >= 7.0} deprecated; {$endif}
+procedure SHFree(Buffer: Pointer); stdcall; {$IF CompilerVersion >= 7.0} deprecated; {$endif}
 
 {$else}
 
@@ -335,7 +335,7 @@ function ILGetSize(Pidl: PItemIDList): Word; stdcall;
 function ILGetNext(Pidl: PItemIDList): PItemIDList; stdcall;
   external shell32 index 153;
 
-procedure ILFree(Pidl: PItemIDList); stdcall {$ifdef VER15_PLUS} deprecated {$endif};
+procedure ILFree(Pidl: PItemIDList); stdcall {$IF CompilerVersion >= 7.0} deprecated {$endif};
   external shell32 index 155;
 
 (* TODO : Unused IL functions:
@@ -360,8 +360,8 @@ function ILGetCount(Pidl: PItemIDList): integer; stdcall;
 
 *)
 
-procedure SHFree(Buffer: Pointer); stdcall {$ifdef VER15_PLUS} deprecated {$endif}; external shell32 index 195;
-function SHAlloc(BufferSize: ULONG): Pointer; stdcall {$ifdef VER15_PLUS} deprecated {$endif}; external shell32 index 196;
+procedure SHFree(Buffer: Pointer); stdcall {$IF CompilerVersion >= 7.0} deprecated {$endif}; external shell32 index 195;
+function SHAlloc(BufferSize: ULONG): Pointer; stdcall {$IF CompilerVersion >= 7.0} deprecated {$endif}; external shell32 index 196;
 {$endif}
 
 
