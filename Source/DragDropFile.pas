@@ -3,9 +3,9 @@ unit DragDropFile;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.5
-// Date:            16-APR-2014
-// Target:          Win32, Delphi 5-XE6
+// Version:         5.6
+// Date:            16-SEP-2014
+// Target:          Win32, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
@@ -248,7 +248,7 @@ type
     property Filename: UnicodeString read GetText write SetText;
   end;
 
-  TFilenameWClipboardFormat = TUnicodeFilenameClipboardFormat {$IF CompilerVersion >= 9.0}deprecated {$IFDEF VER20_PLUS}'Use TUnicodeFilenameClipboardFormat instead'{$ENDIF}{$endif};
+  TFilenameWClipboardFormat = TUnicodeFilenameClipboardFormat {$IF CompilerVersion >= 17.0}deprecated {$IF CompilerVersion >= 20.0}'Use TUnicodeFilenameClipboardFormat instead'{$ifend}{$ifend};
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -303,7 +303,7 @@ type
     property FileMaps: TUnicodeStrings read FFileMaps;
   end;
 
-  TFilenameMapWClipboardFormat = TUnicodeFilenameMapClipboardFormat {$IF CompilerVersion >= 9.0}deprecated {$IFDEF VER20_PLUS}'Use TUnicodeFilenameMapClipboardFormat instead'{$ENDIF}{$endif};
+  TFilenameMapWClipboardFormat = TUnicodeFilenameMapClipboardFormat {$IF CompilerVersion >= 17.0}deprecated {$IF CompilerVersion >= 20.0}'Use TUnicodeFilenameMapClipboardFormat instead'{$ifend}{$ifend};
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -447,7 +447,7 @@ type
     property Filenames[Index: integer]: UnicodeString read GetUnicodeFilename write SetUnicodeFilename;
   end;
 
-  TFileGroupDescriptorWClipboardFormat = TUnicodeFileGroupDescriptorClipboardFormat {$IF CompilerVersion >= 9.0}deprecated {$IF CompilerVersion >= 12.0}'Use TUnicodeFileGroupDescriptorClipboardFormat instead'{$ENDIF}{$endif};
+  TFileGroupDescriptorWClipboardFormat = TUnicodeFileGroupDescriptorClipboardFormat {$IF CompilerVersion >= 17.0}deprecated {$IF CompilerVersion >= 20.0}'Use TUnicodeFileGroupDescriptorClipboardFormat instead'{$ifend}{$ifend};
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -673,19 +673,11 @@ function WriteFilesToZeroList(Data: pointer; Size: integer;
 implementation
 
 uses
-{$IF CompilerVersion >= 6.0}
   RTLConsts,
-{$else}
-  Consts,
-{$endif}
   DragDropPIDL,
   ComObj,
   SysUtils;
 
-{$IF CompilerVersion < 6.0}
-const
-  sLineBreak = #13#10;
-{$endif}
 ////////////////////////////////////////////////////////////////////////////////
 //
 //              TAnsiStrings

@@ -3,9 +3,9 @@ unit DragDropInternet;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.5
-// Date:            16-APR-2014
-// Target:          Win32, Delphi 5-XE6
+// Version:         5.6
+// Date:            16-SEP-2014
+// Target:          Win32, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
@@ -58,7 +58,7 @@ type
     property URL: UnicodeString read GetText write SetText;
   end;
 
-  TURLWClipboardFormat = TUnicodeURLClipboardFormat {$IF CompilerVersion >= 9.0}deprecated {$IF CompilerVersion >= 12.0}'Use TURLWClipboardFormat instead'{$ENDIF}{$endif};
+  TURLWClipboardFormat = TUnicodeURLClipboardFormat {$IF CompilerVersion >= 17.0}deprecated {$IF CompilerVersion >= 20.0}'Use TURLWClipboardFormat instead'{$ifend}{$ifend};
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -96,7 +96,7 @@ type
     procedure Clear; override;
     property URL: AnsiString read FURL write FURL;
     property Title: AnsiString read FTitle write FTitle;
-  end {$IF CompilerVersion >= 7.0} deprecated {$endif};
+  end {$IF CompilerVersion >= 15.0} deprecated {$ifend};
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -132,7 +132,7 @@ type
     property Extra: AnsiString read FExtra write FExtra;
     property Height: integer read FHeight write FHeight;
     property Width: integer read FWidth write FWidth;
-  end {$IF CompilerVersion >= 7.0} deprecated {$endif};
+  end {$IF CompilerVersion >= 15.0} deprecated {$ifend};
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -1552,7 +1552,7 @@ begin
 
     // Get IMessage from IStorage
     OleCheck(OpenIMsgOnIStg(FSession,
-    {$IF CompilerVersion >= 18.0}
+    {$IF CompilerVersion >= 25.0}
       Pointer(@MAPIAllocateBuffer),
       Pointer(@MAPIAllocateMore),
       Pointer(@MAPIFreeBuffer),
@@ -1560,7 +1560,7 @@ begin
       @MAPIAllocateBuffer,
       @MAPIAllocateMore,
       @MAPIFreeBuffer,
-    {$ENDIF}
+    {$ifend}
       IMalloc(MapiGetDefaultMalloc),
       nil,
       FStorages[Index],

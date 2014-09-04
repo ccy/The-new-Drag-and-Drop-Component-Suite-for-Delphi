@@ -3,9 +3,9 @@ unit DropTarget;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.5
-// Date:            16-APR-2014
-// Target:          Win32, Delphi 5-XE6
+// Version:         5.6
+// Date:            16-SEP-2014
+// Target:          Win32, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
@@ -20,10 +20,10 @@ uses
   Windows, ActiveX, Classes, Controls, CommCtrl, ExtCtrls, Forms;
 
 {$include DragDrop.inc}
-{$IF CompilerVersion >= 5.0}{$IFDEF BCB}
+{$IFDEF BCB}
 // shldisp.h only exists in C++Builder 5 and later.
 {$HPPEMIT '#include <shldisp.h>'}
-{$endif}{$endif}
+{$endif}
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -64,7 +64,7 @@ type
 type
   TScrollDirection = (sdUp, sdDown, sdLeft, sdRight);
   TScrollDirections = set of TScrollDirection;
-  TScrolDirections = TScrollDirections {$IF CompilerVersion >= 9.0}deprecated{$endif};
+  TScrolDirections = TScrollDirections {$IF CompilerVersion >= 17.0}deprecated{$ifend};
 
   TDropTargetScrollEvent = procedure(Sender: TObject; Point: TPoint;
     var Scroll: TScrollDirections; var Interval: integer) of object;
@@ -79,12 +79,6 @@ type
     Pos: TPoint;
   end;
 
-{$ifdef BCB}
-{$IF CompilerVersion < 6.0}
-{$hppemit '// Hack to trick C++Builder 4/5 into using a default value for the Unregister methods parameter' }
-{$hppemit '#define ATarget_with_default ATarget = NULL' }
-{$endif}
-{$endif}
   TCustomDropTarget = class(TDragDropComponent, IDropTarget)
   private
     FDataObject: IDataObject;
@@ -222,7 +216,7 @@ type
 // Replaced by the TCustomDropTarget class.
 ////////////////////////////////////////////////////////////////////////////////
   TDropTarget = class(TCustomDropTarget)
-  end {$IF CompilerVersion >= 9.0}deprecated {$IF CompilerVersion >= 12.0}'Use TCustomDropTarget instead'{$ENDIF}{$endif};
+  end {$IF CompilerVersion >= 17.0}deprecated {$IF CompilerVersion >= 20.0}'Use TCustomDropTarget instead'{$ifend}{$ifend};
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -884,9 +878,9 @@ type
     constructor Create(ADropTarget: TCustomDropTarget;
       const ADataObject: IDataObject; AEffect: Longint);
     destructor Destroy; override;
-{$IF CompilerVersion < 14.0}
+{$IF CompilerVersion < 21.0}
     procedure Start;
-{$endif}
+{$ifend}
     property DropTarget: TCustomDropTarget read FDropTarget;
     property DataObject: IDataObject read FDataObject;
     property Effect: Longint read FEffect;
@@ -957,12 +951,12 @@ begin
   end;
 end;
 
-{$IF CompilerVersion < 14.0}
+{$IF CompilerVersion < 21.0}
 procedure TDropTargetTransferThread.Start;
 begin
   Resume;
 end;
-{$endif}
+{$ifend}
 
 procedure TCustomDropTarget.DoEndAsyncTransfer(Sender: TObject);
 begin

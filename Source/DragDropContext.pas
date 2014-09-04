@@ -3,9 +3,9 @@ unit DragDropContext;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.5
-// Date:            16-APR-2014
-// Target:          Win32, Delphi 5-XE6
+// Version:         5.6
+// Date:            16-SEP-2014
+// Target:          Win32, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
@@ -102,29 +102,29 @@ type
 
     function InvokeCommand(var lpici: TCMInvokeCommandInfo): HResult; stdcall;
 
-    {$IF CompilerVersion >= 16.0}
+    {$IF CompilerVersion >= 23.0}
     function GetCommandString(idCmd: UINT_PTR; uFlags: UINT; pwReserved: PUINT;
       pszName: LPSTR; cchMax: UINT): HResult; stdcall;
   	{$ELSE}
     function GetCommandString(idCmd, uType: UINT; pwReserved: PUINT;
       pszName: LPSTR; cchMax: UINT): HResult; stdcall;
-    {$ENDIF}
+    {$ifend}
 
     { IContextMenu2 }
-    {$IF CompilerVersion >= 16.0}
+    {$IF CompilerVersion >= 23.0}
     function HandleMenuMsg(uMsg: UINT; WParam: WPARAM; LParam: LPARAM): HResult; stdcall;
     {$ELSE}
     function HandleMenuMsg(uMsg: UINT; WParam, LParam: Integer): HResult; stdcall;
-    {$ENDIF}
+    {$ifend}
 
     { IContextMenu3 }
-    {$IF CompilerVersion >= 16.0}
+    {$IF CompilerVersion >= 23.0}
     function HandleMenuMsg2(uMsg: UINT; wParam: WPARAM; lParam: LPARAM;
       var lpResult: LRESULT): HResult; stdcall;
     {$ELSE}
     function HandleMenuMsg2(uMsg: UINT; wParam, lParam: Integer;
       var lpResult: Integer): HResult; stdcall;
-    {$ENDIF}
+    {$ifend}
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -190,11 +190,7 @@ uses
 
 function IsLine(Item: TMenuItem): boolean;
 begin
-{$IF CompilerVersion >= 16.0}
   Result := Item.IsLine;
-{$ELSE}
-  Result := Item.Caption = '-';
-{$ENDIF}
 end;
 
 
@@ -218,13 +214,13 @@ begin
   inherited Destroy;
 end;
 
-{$IF CompilerVersion >= 16.0}    // Delphi XE2
+{$IF CompilerVersion >= 23.0}    // Delphi XE2
 function TDropContextMenu.GetCommandString(idCmd: UINT_PTR; uFlags: UINT; pwReserved: PUINT;
   pszName: LPSTR; cchMax: UINT): HResult; stdcall;
 {$ELSE}
 function TDropContextMenu.GetCommandString(idCmd, uType: UINT; pwReserved: PUINT;
   pszName: LPSTR; cchMax: UINT): HResult; stdcall;
-{$ENDIF}
+{$ifend}
 var
   ItemIndex: integer;
   MenuItem: TMenuItem;
@@ -241,11 +237,11 @@ begin
   if (MenuItem <> nil) then
   begin
     Result := S_OK;
- 	  {$IF CompilerVersion >= 16.0}     // Delphi XE2
+ 	  {$IF CompilerVersion >= 23.0}     // Delphi XE2
     case uFlags of
     {$ELSE}
     case uType of
-    {$ENDIF}
+    {$ifend}
       GCS_HELPTEXTA:
         // return ANSI help string for menu item.
         begin
@@ -548,7 +544,7 @@ begin
     NextMenuID - FMenuOffset);
 end;
 
-{$IF CompilerVersion >= 16.0}        // Delphi XE2
+{$IF CompilerVersion >= 23.0}        // Delphi XE2
 function TDropContextMenu.HandleMenuMsg(uMsg: UINT; WParam: WPARAM; LParam: LPARAM): HResult;
 var
   lpResult: LRESULT;
@@ -556,7 +552,7 @@ var
 function TDropContextMenu.HandleMenuMsg(uMsg: UINT; WParam, LParam: Integer): HResult;
 var
   lpResult: Integer;
-{$ENDIF}
+{$ifend}
 begin
 {$IFOPT D+}
   OutputDebugString('IContextMenu2.HandleMenuMsg');
@@ -564,11 +560,11 @@ begin
   Result := HandleMenuMsg2(uMsg, WParam, LParam, lpResult);
 end;
 
-{$IF CompilerVersion >= 16.0}
+{$IF CompilerVersion >= 23.0}
 function TDropContextMenu.HandleMenuMsg2(uMsg: UINT; wParam: WPARAM; lParam: LPARAM; var lpResult: LRESULT): HResult;
 {$ELSE}
 function TDropContextMenu.HandleMenuMsg2(uMsg: UINT; wParam, lParam: Integer; var lpResult: Integer): HResult;
-{$ENDIF}
+{$ifend}
 begin
   Result := S_OK;
 
@@ -670,22 +666,12 @@ begin
   end;
 end;
 
-{$IF CompilerVersion < 5.0}
-type
-  TComponentCracker = class(TComponent);
-{$ENDIF}
-
 procedure TDropContextMenu.SetContextMenu(const Value: TPopupMenu);
 begin
   if (Value <> FContextMenu) then
   begin
-{$IF CompilerVersion >= 5.0}
     if (FContextMenu <> nil) then
       FContextMenu.RemoveFreeNotification(Self);
-{$ELSE}
-    if (FContextMenu <> nil) then
-      TComponentCracker(FContextMenu).Notification(Self, opRemove);
-{$ENDIF}
     FContextMenu := Value;
     if (Value <> nil) then
       Value.FreeNotification(Self);
@@ -897,25 +883,6 @@ end;
 
 type
   TMenuItemCracker = class(TMenuItem);
-{$IF CompilerVersion < 5.0}
-  TOwnerDrawState = set of (odSelected, odGrayed, odDisabled, odChecked,
-    odFocused, odDefault, odHotLight, odInactive, odNoAccel, odNoFocusRect,
-    odReserved1, odReserved2, odComboBoxEdit);
-{$ENDIF}
-
-{$IF CompilerVersion < 5.0}
-
-function GetMenuFont: HFONT;
-var
-  NonClientMetrics: TNonClientMetrics;
-begin
-  NonClientMetrics.cbSize := sizeof(NonClientMetrics);
-  if SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, @NonClientMetrics, 0) then
-    Result := CreateFontIndirect(NonClientMetrics.lfMenuFont)
-  else
-    Result := GetStockObject(SYSTEM_FONT);
-end;
-{$ENDIF}
 
 procedure TDropContextMenu.DrawMenuItem(var DrawItemStruct: TDrawItemStruct);
 var
@@ -947,11 +914,7 @@ begin
       SaveIndex := SaveDC(DrawItemStruct.hDC);
       try
         Canvas.Handle := DrawItemStruct.hDC;
-{$IF CompilerVersion >= 5.0}
         Canvas.Font := Screen.MenuFont;
-{$ELSE}
-        Canvas.Font.Handle := GetMenuFont;
-{$ENDIF}
 
         State := TOwnerDrawState(LongRec(DrawItemStruct.itemState).Lo);
 
@@ -1001,24 +964,19 @@ begin
         if ((MenuItem.Parent <> nil) and (MenuItem.Parent.Parent = nil)) and
           not ((MenuItem.GetParentMenu <> nil) and
           (MenuItem.GetParentMenu.OwnerDraw or (MenuItem.GetParentMenu.Images <> nil)) and
-{$IF CompilerVersion >= 5.0}
           (Assigned(MenuItem.OnAdvancedDrawItem) or Assigned(MenuItem.OnDrawItem))) then
-{$ELSE}
-          (Assigned(MenuItem.OnDrawItem))) then
-{$ENDIF}
         begin
           Canvas.FillRect(DrawItemStruct.rcItem);
 
           // Work around: ImageList images are drawn with different rules...
           // I'm not really sure for which versions of Delphi this is necessary.
-{$IF CompilerVersion < 7.0}
+{$IF CompilerVersion < 15.0}
           if (MenuItem.GetParentMenu.Images = nil) or (MenuItem.ImageIndex = -1) then
             Inc(DrawItemStruct.rcItem.Left, 8);
-{$ENDIF}
+{$ifend}
         end;
 
         // TODO : Unless menu item is ownerdraw we should handle the draw internally instead of relying on TMenuItem's draw code.
-{$IF CompilerVersion >= 5.0}
         // Because the VCL draws menu items different from standard shell menu
         // items, we need to manually handle the drawing of the bitmap and
         // positioning of the text relative to the bitmap.
@@ -1091,9 +1049,6 @@ begin
           end;
         end else
           TMenuItemCracker(MenuItem).AdvancedDrawItem(Canvas, DrawItemStruct.rcItem, State, False);
-{$ELSE}
-        TMenuItemCracker(MenuItem).DrawItem(Canvas, DrawItemStruct.rcItem, (odSelected in State));
-{$ENDIF}
         // Menus.DrawMenuItem(MenuItem, Canvas, DrawItemStruct.rcItem, State);
       finally
         Canvas.Handle := 0;
@@ -1132,11 +1087,7 @@ begin
         SaveIndex := SaveDC(DC);
         try
           Canvas.Handle := DC;
-{$IF CompilerVersion >= 5.0}
           Canvas.Font := Screen.MenuFont;
-{$ELSE}
-          Canvas.Font.Handle := GetMenuFont;
-{$ENDIF}
           TMenuItemCracker(MenuItem).MeasureItem(Canvas, Integer(MeasureItemStruct.itemWidth),
             Integer(MeasureItemStruct.itemHeight));
         finally

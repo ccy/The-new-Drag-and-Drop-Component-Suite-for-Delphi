@@ -3,9 +3,9 @@ unit DragDropComObj;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.3
-// Date:            13-AUG-2013
-// Target:          Win32, Delphi 5-XE4
+// Version:         5.6
+// Date:            16-SEP-2014
+// Target:          Win32, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
 //                  © 2000-2010 Anders Melander
@@ -140,7 +140,7 @@ end;
 function DeleteEmptyRegKey(Key: string; DeleteTree: boolean = True): Boolean;
 var
   SubKey: HKey;
-  NumSubKeys, NumValues: {$IF CompilerVersion >= 18.0}CppULongInt{$ELSE}DWORD{$ENDIF};
+  NumSubKeys, NumValues: {$IF CompilerVersion >= 25.0}CppULongInt{$ELSE}DWORD{$ifend};
   p: PChar;
 begin
   p := nil;

@@ -8,10 +8,11 @@ del /q /s *.identcache
 del /q /s *.local
 del /q /s *.map
 del /q /s *.ico
-del /q /s *.dproj
+del /q /s *.otares
 rmdir /Q /S Source\__history
 rmdir /Q /S Packages\__history
 rmdir /Q /S Library\D2010
+rmdir /Q /S "Library\Delphi 6"
 rmdir /Q /S Library\DXE4
 rmdir /Q /S Library\DXE5
 rmdir /Q /S Library\DXE6

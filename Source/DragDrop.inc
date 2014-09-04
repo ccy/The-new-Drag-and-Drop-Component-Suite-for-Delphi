@@ -4,7 +4,7 @@
 // Description:     Implements base classes and utility functions.
 // Version:         5.6
 // Date:            16-SEP-2014
-// Target:          Win32, Delphi 5-XE7
+// Target:          Win32, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
@@ -32,11 +32,6 @@
 {$IF CompilerVersion >= 6.0}
 {$WARN SYMBOL_PLATFORM OFF}
 {$WARN UNIT_PLATFORM OFF}
-{$endif}
+{$IFEND}
 // Disable "unsafe" warnings. Let's assume I know what I'm doing.
-{$IF CompilerVersion >= 7.0}
-{$WARN UNSAFE_TYPE OFF}
-{$WARN UNSAFE_CODE OFF}
-{$WARN UNSAFE_CAST OFF}
-{$endif}
 

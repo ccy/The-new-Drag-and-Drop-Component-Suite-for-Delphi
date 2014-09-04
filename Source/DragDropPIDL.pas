@@ -3,9 +3,9 @@ unit DragDropPIDL;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.5
-// Date:            16-APR-2014
-// Target:          Win32, Delphi 5-XE6
+// Version:         5.6
+// Date:            16-SEP-2014
+// Target:          Win32, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
@@ -246,11 +246,11 @@ function ILIsEqual(Pidl1, Pidl2: PItemIDList): LongBool; stdcall;
 function ILCombine(Pidl1, Pidl2: PItemIDList): PItemIDList; stdcall;
 function ILGetSize(Pidl: PItemIDList): Word; stdcall;
 function ILGetNext(Pidl: PItemIDList): PItemIDList; stdcall;
-procedure ILFree(Pidl: PItemIDList); stdcall; {$IF CompilerVersion >= 7.0} deprecated; {$endif}
+procedure ILFree(Pidl: PItemIDList); stdcall; {$IF CompilerVersion >= 17.0} deprecated; {$ifend}
 
 // Undocumented IMalloc utility functions...
-function SHAlloc(BufferSize: ULONG): Pointer; stdcall; {$IF CompilerVersion >= 7.0} deprecated; {$endif}
-procedure SHFree(Buffer: Pointer); stdcall; {$IF CompilerVersion >= 7.0} deprecated; {$endif}
+function SHAlloc(BufferSize: ULONG): Pointer; stdcall; {$IF CompilerVersion >= 17.0} deprecated; {$ifend}
+procedure SHFree(Buffer: Pointer); stdcall; {$IF CompilerVersion >= 17.0} deprecated; {$ifend}
 
 {$else}
 
@@ -335,7 +335,7 @@ function ILGetSize(Pidl: PItemIDList): Word; stdcall;
 function ILGetNext(Pidl: PItemIDList): PItemIDList; stdcall;
   external shell32 index 153;
 
-procedure ILFree(Pidl: PItemIDList); stdcall {$IF CompilerVersion >= 7.0} deprecated {$endif};
+procedure ILFree(Pidl: PItemIDList); stdcall {$IF CompilerVersion >= 17.0} deprecated {$ifend};
   external shell32 index 155;
 
 (* TODO : Unused IL functions:
@@ -360,8 +360,8 @@ function ILGetCount(Pidl: PItemIDList): integer; stdcall;
 
 *)
 
-procedure SHFree(Buffer: Pointer); stdcall {$IF CompilerVersion >= 7.0} deprecated {$endif}; external shell32 index 195;
-function SHAlloc(BufferSize: ULONG): Pointer; stdcall {$IF CompilerVersion >= 7.0} deprecated {$endif}; external shell32 index 196;
+procedure SHFree(Buffer: Pointer); stdcall {$IF CompilerVersion >= 17.0} deprecated {$ifend}; external shell32 index 195;
+function SHAlloc(BufferSize: ULONG): Pointer; stdcall {$IF CompilerVersion >= 17.0} deprecated {$ifend}; external shell32 index 196;
 {$endif}
 
 

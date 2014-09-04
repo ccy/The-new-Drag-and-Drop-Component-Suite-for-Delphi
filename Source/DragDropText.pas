@@ -3,9 +3,9 @@ unit DragDropText;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.5
-// Date:            16-APR-2014
-// Target:          Win32, Delphi 5-XE6
+// Version:         5.6
+// Date:            16-SEP-2014
+// Target:          Win32, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
@@ -69,7 +69,7 @@ type
     function HasData: boolean; override;
   end;
 
-  TCustomWideTextClipboardFormat = TCustomUnicodeTextClipboardFormat {$IF CompilerVersion >= 9.0}deprecated {$IF CompilerVersion >= 12.0}'Use TCustomUnicodeTextClipboardFormat instead'{$ENDIF}{$endif};
+  TCustomWideTextClipboardFormat = TCustomUnicodeTextClipboardFormat {$IF CompilerVersion >= 17.0}deprecated {$IF CompilerVersion >= 20.0}'Use TCustomUnicodeTextClipboardFormat instead'{$ifend}{$ifend};
 
 ////////////////////////////////////////////////////////////////////////////////
 //

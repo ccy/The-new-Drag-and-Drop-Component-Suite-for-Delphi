@@ -3,9 +3,9 @@ unit DropSource;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.5
-// Date:            16-APR-2014
-// Target:          Win32, Delphi 5-XE6
+// Version:         5.6
+// Date:            16-SEP-2014
+// Target:          Win32, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
@@ -32,10 +32,11 @@ uses
   Classes;
 
 {$include DragDrop.inc}
-{$IF CompilerVersion >= 5.0}{$IFDEF BCB}
+
+{$IFDEF BCB}
 // shldisp.h only exists in C++Builder 5 and later.
 {$HPPEMIT '#include <shldisp.h>'}
-{$endif}{$endif}
+{$ENDIF}
 
 type
   // These have been disabled since they break the generated C++ headers.
@@ -438,9 +439,6 @@ type
   public
     constructor Create(ADropSource: TCustomDropSource);
     destructor Destroy; override;
-{$IF CompilerVersion < 14.0}
-    procedure Start;
-{$endif}
     property DragResult: TDragResult read FDragResult;
     property Started: THandle read FStarted;
   end;
@@ -583,13 +581,6 @@ begin
     Terminate;
   end;
 end;
-
-{$IF CompilerVersion < 14.0}
-procedure TDropSourceThread.Start;
-begin
-  Resume;
-end;
-{$endif}
 
 // -----------------------------------------------------------------------------
 //                      TCustomDropSource
@@ -1109,7 +1100,11 @@ begin
     try
       FDragInProgress := True;
       // ...and launch it.
+      {$if CompilerVersion >= 21.0}
       AsyncThread.Start;
+      {$else}
+      AsyncThread.Resume;
+      {$ifend}
 
       // Wait for thread to start.
       // If the thread takes longer than 10 seconds to start we assume that
@@ -1792,5 +1787,6 @@ finalization
   if (DebugHook <> 0) then
     RestoreDelphiDropTargets;
 end.
+
 
 
