@@ -7,7 +7,7 @@ from
 Anders Melander
 http://melander.dk/delphi/dragdrop/
 
-The new Drag and Drop Component Suite Version 5.5
+The new Drag and Drop Component Suite Version 5.6
 Released 04-sep-2014
 © 1997-2010 Anders Melander
 © 2011-2014 Sven Harazim
