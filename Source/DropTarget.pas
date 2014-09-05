@@ -11,6 +11,8 @@ unit DropTarget;
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
 //                  © 2000-2010 Anders Melander
 //                  © 2011-2014 Sven Harazim
+// Changes          Add WinTarget property for running without TWinControl Target
+//                  04.09.2014 by Manfred Suesens DUERR Systems GmbH
 // -----------------------------------------------------------------------------
 
 interface
@@ -94,6 +96,7 @@ type
     FMultiTarget: boolean;
     FOptimizedMove: boolean;
     FTarget: TWinControl;
+    FWinTarget: HWND;
 
     FImages: TImageList;
     FDragImageHandle: HImageList;
@@ -148,7 +151,9 @@ type
     procedure DoUnregister(ATarget: TWinControl);
     procedure Notification(AComponent: TComponent; Operation: TOperation); override;
     function GetTarget: TWinControl;
+    function GetWinTarget: HWND;
     procedure SetTarget(const Value: TWinControl);
+    procedure SetWinTarget(const Value: HWND);
     procedure DoAutoScroll(Sender: TObject);
     function SampleMouse(MousePos: TPoint; First: boolean = False): boolean;
     procedure SetShowImage(Show: boolean);
@@ -196,6 +201,7 @@ type
     property ShowImage: boolean read FShowImage write SetShowImage default True;
     // Target
     property Target: TWinControl read GetTarget write SetTarget;
+    property WinTarget: HWND read GetWinTarget write SetWinTarget;
     property MultiTarget: boolean read FMultiTarget write FMultiTarget default False;
     property AutoRegister: boolean read FAutoRegister write FAutoRegister default True;
     // Auto-scroll
@@ -455,13 +461,16 @@ begin
     ** Note also that if no target control exists, the mouse coordinates are
     ** relative to the screen, not the control as is normally the case.
     *)
-    if (FTarget = nil) then
+    if (FTarget = nil) and (FWinTarget = 0) then
     begin
       ShowImage := False;
       AutoScroll := False;
-    end else
+    end else 
     begin
-      ClientPt := FTarget.ScreenToClient(pt);
+      if FTarget = nil then
+        ClientPt := pt   //transfer screen coordinates
+      else
+        ClientPt := FTarget.ScreenToClient(pt);
       FLastPoint := ClientPt;
     end;
 
@@ -537,7 +546,11 @@ begin
         // Note: According to .\Samples\winui\Shell\DragImg\DragImg.doc from the
         // Platform SDK, the return value of IDropTargetHelper.DragEnter should
         // be ignored, but my tests show that it shouldn't.
-        if (Failed(DropTargetHelper.DragEnter(FTarget.Handle, DataObj, pt, dwEffect))) then
+        if FTarget = nil then begin
+          if (Failed(DropTargetHelper.DragEnter(FWinTarget, DataObj, pt, dwEffect))) then
+            FDropTargetHelper := nil;
+        end else
+          if (Failed(DropTargetHelper.DragEnter(FTarget.Handle, DataObj, pt, dwEffect))) then
           FDropTargetHelper := nil;
       end;
 
@@ -549,8 +562,12 @@ begin
           // Currently we will just replace any 'embedded' cursor with our
           // blank (transparent) image otherwise we sometimes get 2 cursors ...
           ImageList_SetDragCursorImage(FImages.Handle, 0, FImageHotSpot.x, FImageHotSpot.y);
-          with ClientPtToWindowPt(FTarget.Handle, ClientPt) do
-            ImageList_DragEnter(FTarget.handle, x, y);
+          if FTarget = nil then begin
+            with ClientPtToWindowPt(FWinTarget, ClientPt) do
+              ImageList_DragEnter(FWinTarget, x, y);
+          end else
+            with ClientPtToWindowPt(FTarget.Handle, ClientPt) do
+              ImageList_DragEnter(FTarget.handle, x, y);
         end;
       end;
     end else
@@ -579,7 +596,7 @@ var
 begin
   // Refuse drop if we dermined in DragEnter that a drop weren't possible,
   // but still handle drag images provided we have a valid target.
-  if (FTarget = nil) then
+  if (FTarget = nil) and (FWinTarget = 0) then
   begin
     dwEffect := DROPEFFECT_NONE;
     Result := E_UNEXPECTED;
@@ -587,7 +604,10 @@ begin
   end;
 
   try
-    ClientPt := FTarget.ScreenToClient(pt);
+    if FTarget = nil then
+      ClientPt := pt      //transfer screen coordinates
+    else
+      ClientPt := FTarget.ScreenToClient(pt);
 
     ShiftState := KeysToShiftStatePlus(grfKeyState);
 
@@ -1342,6 +1362,11 @@ begin
 *)
 end;
 
+function TCustomDropTarget.GetWinTarget: HWND;
+begin
+  Result := FWinTarget;
+end;
+
 resourcestring
   sRichEditWarning =
     'It is strongly recommended that you set the AutoRegister'+#13+
@@ -1376,6 +1401,21 @@ begin
     if (FMultiTarget) and not(csLoading in ComponentState) then
       Unregister;
     Register(Value);
+  end;
+end;
+
+procedure TCustomDropTarget.SetWinTarget(const Value: HWND);
+var
+  res: HResult;
+begin
+  if (FWinTarget = Value) then
+    exit;
+  AutoRegister := False;
+  FWinTarget := Value;
+  res:=RegisterDragDrop(FWinTarget, Self);
+  if res = DRAGDROP_E_ALREADYREGISTERED then begin
+    RevokeDragDrop(FWinTarget);
+    OleCheck(RegisterDragDrop(FWinTarget, Self));
   end;
 end;
 
