@@ -261,7 +261,7 @@ const
  ClipNames: array[CF_TEXT..CF_MAX-1] of string =
    ('CF_TEXT', 'CF_BITMAP', 'CF_METAFILEPICT', 'CF_SYLK', 'CF_DIF', 'CF_TIFF',
    'CF_OEMTEXT', 'CF_DIB', 'CF_PALETTE', 'CF_PENDATA', 'CF_RIFF', 'CF_WAVE',
-   'CF_UNICODETEXT', 'CF_ENHMETAFILE', 'CF_HDROP', 'CF_LOCALE');
+   'CF_UNICODETEXT', 'CF_ENHMETAFILE', 'CF_HDROP', 'CF_LOCALE'{$IF CompilerVersion >= 23.0}, 'CF_DIBV5'{$ifend});
 begin
   StatusBar1.SimpleText := 'Data dropped';
   ListViewDataFormats.Items.BeginUpdate;
