@@ -11,7 +11,7 @@ The new Drag and Drop Component Suite Version 5.6
 Released 04-sep-2014
 © 1997-2010 Anders Melander
 © 2011-2014 Sven Harazim
-https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
+https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi  
 https://github.com/DelphiPraxis/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 
 -------------------------------------------
