@@ -11,26 +11,22 @@ The new Drag and Drop Component Suite Version 5.6
 Released 04-sep-2014  
 © 1997-2010 Anders Melander  
 © 2011-2014 Sven Harazim  
-https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
+https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi  
 https://github.com/DelphiPraxis/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 
-Table of Contents
------------------
+## Table of Contents
 1. Supported platforms
 2. Installation
 3. Uninstallation
 4. Known problems
 
-
-1. Supported platforms
-----------------------
+## 1. Supported platforms
 This version of the library has been tested with Delphi 6, Delphi 7, Delphi 2007,
 Delphi 2009, Delphi 2010, Delphi XE, Delphi XE2, Delphi XE3, Delphi XE4, Delphi XE5,
 Delphi XE6, Delphi XE7
 
 
-2. Installation
----------------
+## 2. Installation
 1. If you are using a previous version of the Drag and Drop Component Suite, uninstall that
    version first.
 
@@ -45,8 +41,7 @@ Delphi XE6, Delphi XE7
 5. Optional: Add the Source folder to the Delphi browsing path.
 
 
-3. Uninstallation
------------------
+## 3. Uninstallation
 1. Open Delphi and uninstall the Drag and Drop Component Suite design time package.
 
 2. Remove the Library folder from the Delphi library search path.
@@ -56,8 +51,7 @@ Delphi XE6, Delphi XE7
 4. Locate the folder where you installed The Drag and Drop Component Suite and delete that
    folder.
 
-4. Known problems
------------------
+## 4. Known problems
 * When the demo applications are compiled with Delphi 7, some of them
   will probably emit a lot of "Unsafe type", "Unsafe code" etc. warnings.
   This doesn't mean that there's anything wrong with the demos. It just
