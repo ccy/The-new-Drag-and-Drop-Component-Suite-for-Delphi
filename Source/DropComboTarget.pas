@@ -3,29 +3,35 @@ unit DropComboTarget;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.6
-// Date:            16-SEP-2014
-// Target:          Win32, Delphi 6-XE7
+// Version:         5.7
+// Date:            28-FEB-2015
+// Target:          Win32, Win64, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
 //                  © 2000-2010 Anders Melander
-//                  © 2011-2014 Sven Harazim
+//                  © 2011-2015 Sven Harazim
 // -----------------------------------------------------------------------------
 
 interface
 
 uses
+  {$IF CompilerVersion >= 23.0}
+  System.Classes,
+  WinApi.ActiveX,
+  Vcl.Graphics,
+  {$ELSE}
+  Classes,
+  ActiveX,
+  Graphics,
+  {$ifend}
   DragDrop,
   DropTarget,
   DragDropFormats,
   DragDropInternet,
   DragDropGraphics,
   DragDropFile,
-  DragDropText,
-  Classes,
-  Graphics,
-  ActiveX;
+  DragDropText;
 
 type
   // Note: mfCustom is used to support DataFormatAdapters.

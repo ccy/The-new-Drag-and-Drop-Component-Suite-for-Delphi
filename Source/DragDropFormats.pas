@@ -3,25 +3,35 @@ unit DragDropFormats;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.6
-// Date:            16-SEP-2014
-// Target:          Win32, Delphi 6-XE7
+// Version:         5.7
+// Date:            28-FEB-2015
+// Target:          Win32, Win64, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
 //                  © 2000-2010 Anders Melander
-//                  © 2011-2014 Sven Harazim
+//                  © 2011-2015 Sven Harazim
 // -----------------------------------------------------------------------------
 
 interface
 
-uses
-  DragDrop,
-  Windows,
-  Classes,
-  ActiveX;
-
 {$include DragDrop.inc}
+
+uses
+  {$IF CompilerVersion >= 23.0}
+  System.SysUtils,System.Classes,System.Win.ComObj,
+  WinApi.Windows,WinApi.ActiveX,WinApi.ShlObj,
+  Vcl.AxCtrls,
+  {$ELSE}
+  SysUtils,Classes,ComObj,
+  Windows,ActiveX,ShlObj,
+  AxCtrls,
+  {$ifend}
+  DragDrop;
+//uses
+//  DropSource,
+//  DropTarget,
+//  ;
 
 type
   PLargeint = ^Largeint;
@@ -528,13 +538,13 @@ function GetMediumDataSize(Medium: TStgMedium): integer;
 ////////////////////////////////////////////////////////////////////////////////
 implementation
 
-uses
-  DropSource,
-  DropTarget,
-  ComObj,
-  ShlObj,
-  AxCtrls,
-  SysUtils;
+//uses
+//  DropSource,
+//  DropTarget,
+//  ComObj,
+//  ShlObj,
+//  AxCtrls,
+//  SysUtils;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -1210,7 +1220,7 @@ begin
 
   // (FormatEtcIn.tymed <> -1) is a work around for drop targets that specify
   // the tymed incorrectly. E.g. the Nero Express CD burner does this and thus
-  // asks for more than it can handle. 
+  // asks for more than it can handle.
   if (FormatEtcIn.tymed <> -1) and
     (FormatEtc.tymed and FormatEtcIn.tymed and TYMED_ISTREAM <> 0) then
   begin
@@ -1566,7 +1576,7 @@ end;
 var
   CF_PREFERREDDROPEFFECT: TClipFormat = 0;
 
-// GetClassClipboardFormat is used by TCustomDropTarget.GetPreferredDropEffect 
+// GetClassClipboardFormat is used by TCustomDropTarget.GetPreferredDropEffect
 class function TPreferredDropEffectClipboardFormat.GetClassClipboardFormat: TClipFormat;
 begin
   if (CF_PREFERREDDROPEFFECT = 0) then

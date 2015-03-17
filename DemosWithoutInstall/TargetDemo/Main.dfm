@@ -1,9 +1,9 @@
 object Form1: TForm1
   Left = 286
   Top = 171
-  Width = 402
-  Height = 288
   Caption = 'Simple Target Demo'
+  ClientHeight = 249
+  ClientWidth = 386
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,12 +13,13 @@ object Form1: TForm1
   OldCreateOrder = True
   Position = poScreenCenter
   Scaled = False
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 394
+    Width = 386
     Height = 41
     Align = alTop
     BevelOuter = bvNone
@@ -33,18 +34,18 @@ object Form1: TForm1
   end
   object Panel2: TPanel
     Left = 0
-    Top = 209
-    Width = 394
+    Top = 204
+    Width = 386
     Height = 45
     Align = alBottom
     BevelOuter = bvNone
     Caption = ' '
     TabOrder = 1
     DesignSize = (
-      394
+      386
       45)
     object ButtonClose: TButton
-      Left = 159
+      Left = 155
       Top = 12
       Width = 75
       Height = 25
@@ -59,8 +60,8 @@ object Form1: TForm1
   object ListView1: TListView
     Left = 0
     Top = 41
-    Width = 394
-    Height = 168
+    Width = 386
+    Height = 163
     Align = alClient
     Columns = <
       item
@@ -74,13 +75,5 @@ object Form1: TForm1
     ReadOnly = True
     TabOrder = 2
     ViewStyle = vsReport
-  end
-  object DropFileTarget1: TDropFileTarget
-    DragTypes = [dtCopy, dtMove, dtLink]
-    OnDrop = DropFileTarget1Drop
-    Target = ListView1
-    OptimizedMove = True
-    Left = 329
-    Top = 220
   end
 end

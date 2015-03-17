@@ -15,13 +15,13 @@ type
     Label1: TLabel;
     Panel2: TPanel;
     ButtonClose: TButton;
-    DropFileTarget1: TDropFileTarget;
     ListView1: TListView;
     procedure ButtonCloseClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    DropFileTarget1: TDropFileTarget;
     procedure DropFileTarget1Drop(Sender: TObject; ShiftState: TShiftState;
       Point: TPoint; var Effect: Integer);
-  private
-    { Private declarations }
   public
     { Public declarations }
   end;
@@ -78,6 +78,22 @@ begin
   // delete the source data. See also "Optimized move".
   if (Effect = DROPEFFECT_MOVE) then
     Effect := DROPEFFECT_NONE;
+end;
+
+procedure TForm1.FormCreate(Sender: TObject);
+begin
+
+  DropFileTarget1 := TDropFileTarget.Create(Self);
+
+  with DropFileTarget1 do
+  begin
+    Parent := self;
+    Name := 'DropFileTarget1';
+    DragTypes := [dtCopy, dtMove, dtLink];
+    OnDrop := DropFileTarget1Drop;
+    Target := ListView1;
+    OptimizedMove := True;
+  end;
 end;
 
 end.

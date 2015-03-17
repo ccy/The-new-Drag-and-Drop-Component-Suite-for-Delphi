@@ -3,14 +3,14 @@ unit DropTarget;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.6
-// Date:            16-SEP-2014
-// Target:          Win32, Delphi 6-XE7
+// Version:         5.7
+// Date:            28-FEB-2015
+// Target:          Win32, Win64, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
 //                  © 2000-2010 Anders Melander
-//                  © 2011-2014 Sven Harazim
+//                  © 2011-2015 Sven Harazim
 // Changes          Add WinTarget property for running without TWinControl Target
 //                  04.09.2014 by Manfred Suesens DUERR Systems GmbH
 // -----------------------------------------------------------------------------
@@ -18,8 +18,16 @@ unit DropTarget;
 interface
 
 uses
-  DragDrop,
-  Windows, ActiveX, Classes, Controls, CommCtrl, ExtCtrls, Forms;
+  {$IF CompilerVersion >= 23.0}
+  System.SysUtils,System.Classes,System.Win.ComObj,
+  WinApi.Windows,WinApi.ActiveX,Winapi.Messages,Winapi.CommCtrl,Winapi.ShlObj,
+  Vcl.Controls,Vcl.Graphics,Vcl.ExtCtrls,Vcl.Forms,Vcl.ClipBrd,Vcl.ComCtrls,Vcl.Dialogs,
+  {$ELSE}
+  SysUtils,Classes,ComObj,
+  Windows,ActiveX,Messages,CommCtrl,ShlObj,
+  Controls,Graphics,ExtCtrls,Forms,ClipBrd,ComCtrls,Dialogs,
+  {$ifend}
+  DragDrop,DragDropFormats;
 
 {$include DragDrop.inc}
 {$IFDEF BCB}
@@ -81,6 +89,12 @@ type
     Pos: TPoint;
   end;
 
+{$ifdef BCB}
+{$IF CompilerVersion < 14.0}
+{$hppemit '// Hack to trick C++Builder 4/5 into using a default value for the Unregister methods parameter' }
+{$hppemit '#define ATarget_with_default ATarget = NULL' }
+{$endif}
+{$endif}
   TCustomDropTarget = class(TDragDropComponent, IDropTarget)
   private
     FDataObject: IDataObject;
@@ -295,17 +309,6 @@ type
 **
 *******************************************************************************)
 implementation
-
-uses
-  DragDropFormats,
-  ComObj,
-  SysUtils,
-  Graphics,
-  Messages,
-  ShlObj,
-  ClipBrd,
-  Dialogs,
-  ComCtrls;
 
 resourcestring
   sTargetAsyncBusy = 'Can''t clear data while async data transfer is in progress';

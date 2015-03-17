@@ -3,7 +3,7 @@ program SimpleTargetDemo;
 {%File 'readme.txt'}
 
 uses
-  Forms,
+  {$IF CompilerVersion >= 23.0}Vcl.{$ENDIF}Forms,
   Main in 'Main.pas' {Form1};
 
 {$R *.RES}

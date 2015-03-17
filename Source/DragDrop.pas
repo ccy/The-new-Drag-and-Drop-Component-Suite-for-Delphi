@@ -3,14 +3,14 @@ unit DragDrop;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.6
-// Date:            16-SEP-2014
-// Target:          Win32, Delphi 6-XE7
+// Version:         5.7
+// Date:            28-FEB-2015
+// Target:          Win32, Win64, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
 //                  © 2000-2010 Anders Melander
-//                  © 2011-2014 Sven Harazim
+//                  © 2011-2015 Sven Harazim
 // -----------------------------------------------------------------------------
 // TODO -oanme -cPortability : Replace all public use of HWND with THandle. BCB's HWND <> Delphi's HWND.
 
@@ -19,14 +19,16 @@ interface
 {$include DragDrop.inc}
 
 uses
-{$IF CompilerVersion < 17.0}
-  Graphics,
-{$IFEND}
-  Classes,
-  Controls,
-  Windows,
-  ActiveX;
-
+  {$IF CompilerVersion >= 23.0}
+  System.SysUtils,System.Classes,{$ifdef DEBUG}System.Win.ComObj,{$endif}
+  WinApi.Windows,WinApi.ActiveX,Winapi.Messages,Winapi.MMSystem,Winapi.ShlObj,
+  Vcl.Controls,Vcl.Graphics
+  {$else}
+  SysUtils,Classes,{$ifdef DEBUG}ComObj,{$endif}
+  Windows,ActiveX,Messages,MMSystem,ShlObj,
+  Controls,Graphics
+  {$ifend}
+  ;
 
 {$IFDEF BCB}
 // shldisp.h only exists in C++Builder 5 and later.
@@ -91,11 +93,11 @@ const
   {$EXTERNALSYM DROPEFFECT_MOVE}
   {$EXTERNALSYM DROPEFFECT_LINK}
   {$EXTERNALSYM DROPEFFECT_SCROLL}
-  DROPEFFECT_NONE   = ActiveX.DROPEFFECT_NONE;
-  DROPEFFECT_COPY   = ActiveX.DROPEFFECT_COPY;
-  DROPEFFECT_MOVE   = ActiveX.DROPEFFECT_MOVE;
-  DROPEFFECT_LINK   = ActiveX.DROPEFFECT_LINK;
-  DROPEFFECT_SCROLL = ActiveX.DROPEFFECT_SCROLL;
+  DROPEFFECT_NONE   = {$IF CompilerVersion >= 23.0}WinApi.{$ifend}ActiveX.DROPEFFECT_NONE;
+  DROPEFFECT_COPY   = {$IF CompilerVersion >= 23.0}WinApi.{$ifend}ActiveX.DROPEFFECT_COPY;
+  DROPEFFECT_MOVE   = {$IF CompilerVersion >= 23.0}WinApi.{$ifend}ActiveX.DROPEFFECT_MOVE;
+  DROPEFFECT_LINK   = {$IF CompilerVersion >= 23.0}WinApi.{$ifend}ActiveX.DROPEFFECT_LINK;
+  DROPEFFECT_SCROLL = {$IF CompilerVersion >= 23.0}WinApi.{$ifend}ActiveX.DROPEFFECT_SCROLL;
 
 type
   (*
@@ -756,6 +758,24 @@ var
 
 ////////////////////////////////////////////////////////////////////////////////
 //
+//              Misc drag drop API related constants
+//
+////////////////////////////////////////////////////////////////////////////////
+
+// The following DVASPECT constants are missing from some versions of Delphi and
+// C++Builder.
+//{$ifndef VER135_PLUS}
+//const
+//{$ifndef VER10_PLUS}
+//  DVASPECT_SHORTNAME = 2; // use for CF_HDROP to get short name version of file paths
+//{$endif}
+//  DVASPECT_COPY = 3; // use to indicate format is a "Copy" of the data (FILECONTENTS, FILEDESCRIPTOR, etc)
+//  DVASPECT_LINK = 4; // use to indicate format is a "Shortcut" to the data (FILECONTENTS, FILEDESCRIPTOR, etc)
+//{$endif}
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
 //              Wide string functions from WideStrUtils unit
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -785,16 +805,10 @@ const
 implementation
 
 uses
-{$ifdef DEBUG}
-  ComObj,
-{$endif}
   DragDropFormats, // Used by TRawClipboardFormat
   DropSource,
-  DropTarget,
-  Messages,
-  ShlObj,
-  MMSystem,
-  SysUtils;
+  DropTarget
+  ;
 
 resourcestring
   sImplementationRequired = 'Internal error: %s.%s needs implementation';
@@ -868,7 +882,7 @@ function TInterfacedComponent.QueryInterface(const IID: TGuid; out Obj): HRESULT
   var
     GUID: string;
   begin
-    GUID := ComObj.GUIDToString(IID);
+    GUID := {$IF CompilerVersion >= 23.0}System.Win.{$ifend}ComObj.GUIDToString(IID);
     Result := GetRegStringValue('Interface\'+GUID, '');
     if (Result = '') then
       Result := GUID;
@@ -1152,7 +1166,7 @@ var
   Len: integer;
 begin
   SetLength(Result, 255); // 255 is just an artificial limit.
-  Len := Windows.GetClipboardFormatName(GetClipboardFormat, PChar(Result), 255);
+  Len := {$IF CompilerVersion >= 23.0}WinApi.{$ifend}Windows.GetClipboardFormatName(GetClipboardFormat, PChar(Result), 255);
   SetLength(Result, Len);
 end;
 
@@ -2016,7 +2030,7 @@ begin
   // calls to the clear method and instead introduces the ClearData method.
 
   // Since Clear() doesn't do anything the class must make sure that ClearData()
-  // is called before FMedium is modified. Otherwise we will leak. 
+  // is called before FMedium is modified. Otherwise we will leak.
 end;
 
 procedure TRawClipboardFormat.ClearData;

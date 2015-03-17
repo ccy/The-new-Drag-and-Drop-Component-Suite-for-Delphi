@@ -3,28 +3,35 @@ unit DragDropFile;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.6
-// Date:            16-SEP-2014
-// Target:          Win32, Delphi 6-XE7
+// Version:         5.7
+// Date:            28-FEB-2015
+// Target:          Win32, Win64, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
 //                  © 2000-2010 Anders Melander
-//                  © 2011-2014 Sven Harazim
+//                  © 2011-2015 Sven Harazim
 // -----------------------------------------------------------------------------
 
 interface
 
 uses
+  {$IF CompilerVersion >= 23.0}
+  System.SysUtils,System.Classes,System.Win.ComObj,System.RTLConsts,
+  {$IF CompilerVersion >= 25.0}System.AnsiStrings,{$IFEND}
+  WinApi.Windows,WinApi.ShlObj,WinApi.ActiveX,
+  Vcl.Controls,Vcl.Graphics,
+  {$ELSE}
+  SysUtils,Classes,ComObj,RTLConsts,
+  Windows,ShlObj,ActiveX,
+  Controls,Graphics,
+  {$ifend}
   DragDrop,
   DropTarget,
   DropSource,
   DragDropFormats,
-  DragDropText,
-  ShlObj,
-  ActiveX,
-  Windows,{$IF CompilerVersion >= 25.0}AnsiStrings,{$IFEND}
-  Classes;
+  DragDropText
+  ;
 
 {$include DragDrop.inc}
 
@@ -673,10 +680,7 @@ function WriteFilesToZeroList(Data: pointer; Size: integer;
 implementation
 
 uses
-  RTLConsts,
-  DragDropPIDL,
-  ComObj,
-  SysUtils;
+  DragDropPIDL;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -1579,7 +1583,7 @@ begin
       end else
       begin
         s := Files[i];
-        {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrPLCopy(p, AnsiString(s), Size);
+        {$IF CompilerVersion >= 25.0}System.AnsiStrings.{$IFEND}StrPLCopy(p, AnsiString(s), Size);
         StringSize := Length(s)+1;
       end;
       inc(p, StringSize);
@@ -2055,7 +2059,7 @@ begin
   if (Index >= Count) then
     raise Exception.CreateFmt('Filename index out of bounds (%d)', [Index]);
   SetLength(s, MAX_PATH);
-  {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrLCopy(PAnsiChar(s), @FileGroupDescriptor^.fgd[Index].cFileName[0], MAX_PATH);
+  {$IF CompilerVersion >= 25.0}System.AnsiStrings.{$IFEND}StrLCopy(PAnsiChar(s), @FileGroupDescriptor^.fgd[Index].cFileName[0], MAX_PATH);
   Result := PAnsiChar(s);
 end;
 {$IFDEF R_PLUS}
@@ -2078,7 +2082,7 @@ procedure TAnsiFileGroupDescriptorClipboardFormat.SetAnsiFilename(Index: integer
 begin
   if (Index >= Count) then
     raise Exception.CreateFmt('Filename index out of bounds (%d)', [Index]);
-  {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrPLCopy(@FileGroupDescriptor^.fgd[Index].cFileName[0], Value, MAX_PATH);
+  {$IF CompilerVersion >= 25.0}System.AnsiStrings.{$IFEND}StrPLCopy(@FileGroupDescriptor^.fgd[Index].cFileName[0], Value, MAX_PATH);
 end;
 {$IFDEF R_PLUS}
   {$RANGECHECKS ON}

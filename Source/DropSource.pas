@@ -3,14 +3,14 @@ unit DropSource;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.6
-// Date:            16-SEP-2014
-// Target:          Win32, Delphi 6-XE7
+// Version:         5.7
+// Date:            28-FEB-2015
+// Target:          Win32, Win64, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
 //                  © 2000-2010 Anders Melander
-//                  © 2011-2014 Sven Harazim
+//                  © 2011-2015 Sven Harazim
 // -----------------------------------------------------------------------------
 // TODO -oanme -cCheckItOut : OleQueryLinkFromData
 // TODO -oanme -cDocumentation : CutToClipboard and CopyToClipboard alters the value of PreferredDropEffect.
@@ -23,15 +23,19 @@ unit DropSource;
 
 interface
 
-uses
-  DragDrop,
-  DragDropFormats,
-  ActiveX,
-  Controls,
-  Windows,
-  Classes;
-
 {$include DragDrop.inc}
+
+uses
+  {$IF CompilerVersion >= 23.0}
+  System.SysUtils,System.Classes,System.Win.ComObj,
+  WinApi.Windows,WinApi.Messages,WinApi.ActiveX,WinApi.CommCtrl,
+  Vcl.Controls,Vcl.Graphics,
+  {$else}
+  SysUtils,Classes,ComObj,
+  Windows,Messages,ActiveX,CommCtrl,
+  Controls,Graphics,
+  {$ifend}
+  DragDrop,DragDropFormats;
 
 {$IFDEF BCB}
 // shldisp.h only exists in C++Builder 5 and later.
@@ -311,12 +315,12 @@ type
 *******************************************************************************)
 implementation
 
-uses
-  Messages,
-  CommCtrl,
-  ComObj,
-  Graphics,
-  SysUtils;
+//uses
+//  Messages,
+//  CommCtrl,
+//  ComObj,
+//  Graphics,
+//  SysUtils;
 
 resourcestring
   sDropSourceBusy = 'A drag and drop operation is already in progress';
@@ -449,7 +453,7 @@ begin
   FreeOnTerminate := True;
   FDropSource := ADropSource;
   FDragResult := drAsync;
-  FStarted := Windows.CreateEvent(nil, False, False, nil);
+  FStarted := {$IF CompilerVersion >= 23.0}WinApi.{$ifend}Windows.CreateEvent(nil, False, False, nil);
 
   // Marshall interfaces to thread for use by DoDragDrop API function.
   OleCheck(CoMarshalInterThreadInterfaceInStream(IDataObject, FDropSource,
@@ -875,7 +879,7 @@ begin
       CloseHandle(FAsyncTargetEvent);
       FAsyncTargetEvent := 0;
     end;
-    FAsyncTargetEvent := Windows.CreateEvent(nil, False, False, nil);
+    FAsyncTargetEvent := {$IF CompilerVersion >= 23.0}WinApi.{$ifend}Windows.CreateEvent(nil, False, False, nil);
     FAsyncTargetTransfer := True;
     Result := S_OK;
   end else
@@ -1181,7 +1185,7 @@ end;
 
 procedure TCustomDropSource.DataChanging(Sender: TObject);
 begin
-  // Data is changing - Flush clipboard to freeze the contents. 
+  // Data is changing - Flush clipboard to freeze the contents.
   FlushClipboard;
 end;
 
@@ -1444,7 +1448,7 @@ begin
   // Must flush clipboard before data formats are destroyed. Otherwise clipboard
   // can be left with references to data which can no longer be supplied.
   FlushClipboard;
-  
+
   // Delete all target formats owned by the object
   for i := FDataFormats.Count-1 downto 0 do
     FDataFormats[i].Free;
@@ -1787,6 +1791,5 @@ finalization
   if (DebugHook <> 0) then
     RestoreDelphiDropTargets;
 end.
-
 
 

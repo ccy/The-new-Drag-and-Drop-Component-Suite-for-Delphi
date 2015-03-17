@@ -10,7 +10,7 @@ uses
   MapiDefs,
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   ExtCtrls, ComCtrls, StdCtrls, DragDrop, DropTarget, DragDropText, ImgList,
-  Menus, ActnList;
+  Menus, ActnList, Actions, Types;
 
 type
   TMessage = class(TObject)
@@ -29,8 +29,6 @@ type
   end;
 
   TFormOutlookTarget = class(TForm)
-    DataFormatAdapterOutlook: TDataFormatAdapter;
-    DropEmptyTarget1: TDropEmptyTarget;
     ImageListSmall: TImageList;
     StatusBar1: TStatusBar;
     ImageListBig: TImageList;
@@ -118,6 +116,8 @@ type
     procedure SetParentForm(const Value: TFormOutlookTarget);
     property ParentForm: TFormOutlookTarget read FParentForm write SetParentForm;
   public
+    DropEmptyTarget1: TDropEmptyTarget;
+    DataFormatAdapterOutlook: TDataFormatAdapter;
     property OwnedMessage: TMessage read FOwnedMessage write FOwnedMessage;
   end;
 
@@ -385,6 +385,18 @@ begin
 
   ListViewBrowser.Visible := False;
   SplitterBrowser.Visible := False;
+
+  DropEmptyTarget1 := TDropEmptyTarget.Create(Self);
+  DataFormatAdapterOutlook := TDataFormatAdapter.Create(Self);
+
+  DropEmptyTarget1.Name := 'DropEmptyTarget1';
+  DropEmptyTarget1.DragTypes := [dtCopy, dtLink];
+  DropEmptyTarget1.OnDrop := DropTextTarget1Drop;
+  DropEmptyTarget1.Target := self;
+
+  DataFormatAdapterOutlook.Name := 'DataFormatAdapterOutlook';
+  DataFormatAdapterOutlook.DragDropComponent := DropEmptyTarget1;
+  DataFormatAdapterOutlook.DataFormatName := 'TOutlookDataFormat';
 end;
 
 procedure TFormOutlookTarget.FormDestroy(Sender: TObject);

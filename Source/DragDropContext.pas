@@ -3,28 +3,30 @@ unit DragDropContext;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.6
-// Date:            16-SEP-2014
-// Target:          Win32, Delphi 6-XE7
+// Version:         5.7
+// Date:            28-FEB-2015
+// Target:          Win32, Win64, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
 //                  © 2000-2010 Anders Melander
-//                  © 2011-2014 Sven Harazim
+//                  © 2011-2015 Sven Harazim
 // -----------------------------------------------------------------------------
 
 interface
 
 uses
-  Windows,
-  Graphics,
+  {$IF CompilerVersion >= 23.0}
+  System.SysUtils,System.Classes,System.Win.ComObj,System.Win.Registry,{$IF CompilerVersion >= 25.0}System.AnsiStrings,{$IFEND}
+  WinApi.Windows,WinApi.Messages,WinApi.ActiveX,WinApi.ShlObj,
+  Vcl.Graphics,Vcl.Menus,Vcl.Dialogs,Vcl.ImgList,Vcl.Controls {TControlCanvas},Vcl.Forms,{Screen}
+  {$ELSE}
+  SysUtils,Classes,ComObj,Registry,
+  Windows,Messages,ActiveX,ShlObj,
+  Graphics,Menus,Dialogs,ImgList,Controls {TControlCanvas},Forms,{Screen}
+  {$ifend}
   DragDrop,
-  DragDropComObj,
-  Menus,
-  ShlObj,
-  ActiveX,
-  Messages,{$IF CompilerVersion >= 25.0}AnsiStrings,{$IFEND}
-  Classes;
+  DragDropComObj;
 
 {$INCLUDE DragDrop.inc}
 
@@ -66,7 +68,7 @@ type
   TPrepareContextMenuEvent = procedure(Sender: TObject; var Continue: boolean) of object;
 
   TDropContextMenu = class(TInterfacedComponent, IShellExtInit, IContextMenu,
-      IContextMenu2, IContextMenu3)
+    IContextMenu2, IContextMenu3)
   private
     FContextMenu: TPopupMenu;
     FMenuOffset, FLastMenuID: DWORD;
@@ -171,15 +173,8 @@ type
 implementation
 
 uses
-  Dialogs,
   DragDropFile,
-  DragDropPIDL,
-  Registry,
-  ComObj,
-  SysUtils,
-  ImgList,
-  Controls, // TControlCanvas
-  Forms; // Screen
+  DragDropPIDL;
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -226,9 +221,9 @@ var
   MenuItem: TMenuItem;
   sAnsi: AnsiString;
 begin
-{$IFOPT D+}
+{$ifopt D+}
   OutputDebugString('IContextMenu.GetCommandString');
-{$ENDIF}
+{$endif}
 
   ItemIndex := integer(idCmd);
   MenuItem := GetMenuItem(ItemIndex);
@@ -246,7 +241,7 @@ begin
         // return ANSI help string for menu item.
         begin
           sAnsi := AnsiString(MenuItem.Hint);
-          {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrLCopy(pszName, PAnsiChar(sAnsi), cchMax);
+          {$IF CompilerVersion >= 25.0}System.AnsiStrings.{$IFEND}StrLCopy(pszName, PAnsiChar(sAnsi), cchMax);
         end;
 
       GCS_HELPTEXTW:
@@ -278,9 +273,9 @@ var
   ItemIndex: integer;
   MenuItem: TMenuItem;
 begin
-{$IFOPT D+}
+{$ifopt D+}
   OutputDebugString('IContextMenu.InvokeCommand');
-{$ENDIF}
+{$endif}
 
   Result := E_FAIL;
 
@@ -302,7 +297,7 @@ begin
       except
         on E: Exception do
         begin
-          Windows.MessageBox(0, PChar(E.Message), 'Error',
+          {$IF CompilerVersion >= 23.0}WinApi.{$ifend}Windows.MessageBox(0, PChar(E.Message), 'Error',
             MB_OK or MB_ICONEXCLAMATION or MB_SYSTEMMODAL);
           Result := E_UNEXPECTED;
         end;
@@ -338,7 +333,7 @@ function TDropContextMenu.QueryContextMenu(Menu: HMENU; indexMenu, idCmdFirst,
 
     MenuIndex := 0;
 
-    for i := 0 to MenuItem.Count - 1 do
+    for i := 0 to MenuItem.Count-1 do
       if (MenuItem[i].Visible) then
       begin
         TraverseMenu(MenuItem[i], MenuIndex, MenuID);
@@ -352,9 +347,9 @@ var
   MenuItemInfo: TMenuItemInfo;
   Continue: boolean;
 begin
-{$IFOPT D+}
+{$ifopt D+}
   OutputDebugString('IContextMenu.QueryContextMenu');
-{$ENDIF}
+{$endif}
 
   // Before the menu is processed/built we give the user a chance to customize
   // it or to disable it altogether.
@@ -404,7 +399,7 @@ begin
   begin
     FMenuOffset := idCmdFirst;
     NextMenuID := idCmdFirst;
-    for i := 0 to FContextMenu.Items.Count - 1 do
+    for i := 0 to FContextMenu.Items.Count-1 do
       if (FContextMenu.Items[i].Visible) then
       begin
         FillChar(MenuItemInfo, SizeOf(MenuItemInfo), 0);
@@ -434,7 +429,7 @@ begin
         begin
           MenuItemInfo.fMask := MenuItemInfo.fMask or MIIM_STRING;
           MenuItemInfo.dwTypeData := PChar(FContextMenu.Items[i].Caption);
-          MenuItemInfo.cch := Length(FContextMenu.Items[i].Caption) + 1;
+          MenuItemInfo.cch := Length(FContextMenu.Items[i].Caption)+1;
           MenuItemInfo.fType := MFT_STRING;
 
           if (FContextMenu.Items[i].Count > 0) then
@@ -537,11 +532,11 @@ begin
     NextMenuID := 0;
   end;
 
-  FLastMenuID := NextMenuID - 1;
+  FLastMenuID := NextMenuID-1;
 
   // Return number of menu items added - plus one (according to MSDN)
   Result := MakeResult(SEVERITY_SUCCESS, FACILITY_NULL,
-    NextMenuID - FMenuOffset);
+    NextMenuID-FMenuOffset);
 end;
 
 {$IF CompilerVersion >= 23.0}        // Delphi XE2
@@ -554,9 +549,10 @@ var
   lpResult: Integer;
 {$ifend}
 begin
-{$IFOPT D+}
+{$ifopt D+}
   OutputDebugString('IContextMenu2.HandleMenuMsg');
-{$ENDIF}
+{$endif}
+
   Result := HandleMenuMsg2(uMsg, WParam, LParam, lpResult);
 end;
 
@@ -571,9 +567,9 @@ begin
   case uMsg of
     WM_INITMENUPOPUP:
       begin
-{$IFOPT D+}
+{$ifopt D+}
         OutputDebugString('IContextMenu3.HandleMenuMsg2(WM_INITMENUPOPUP)');
-{$ENDIF}
+{$endif}
         FMenuHandle := HMENU(wParam);
       end;
 
@@ -583,9 +579,9 @@ begin
       ** owner drawn context menus support accelerator keys.
       *)
       begin
-{$IFOPT D+}
+{$ifopt D+}
         OutputDebugString('IContextMenu3.HandleMenuMsg2(WM_MENUCHAR)');
-{$ENDIF}
+{$endif}
         // Since the internal command IDs of the menu item wrappers
         // (TMenuItem.Command) doesn't match the IDs we assigned the menu items
         // (in IContextMenu.QueryContextMenu), we can't just forward the
@@ -600,23 +596,23 @@ begin
 
     WM_DRAWITEM:
       begin
-{$IFOPT D+}
+{$ifopt D+}
         OutputDebugString('IContextMenu3.HandleMenuMsg2(WM_DRAWITEM)');
-{$ENDIF}
+{$endif}
         DrawMenuItem(PDrawItemStruct(lParam)^);
       end;
 
     WM_MEASUREITEM:
       begin
-{$IFOPT D+}
+{$ifopt D+}
         OutputDebugString('IContextMenu3.HandleMenuMsg2(WM_MEASUREITEM)');
-{$ENDIF}
+{$endif}
         MeasureItem(PMeasureItemStruct(lParam)^);
       end;
   else
-{$IFOPT D+}
+{$ifopt D+}
     OutputDebugString(PChar(Format('IContextMenu3.HandleMenuMsg2(%d)', [uMsg])));
-{$ENDIF}
+{$endif}
   end;
 end;
 
@@ -629,9 +625,9 @@ end;
 function TDropContextMenu.Initialize(pidlFolder: PItemIDList;
   lpdobj: IDataObject; hKeyProgID: HKEY): HResult;
 begin
-{$IFOPT D+}
+{$ifopt D+}
   OutputDebugString('IShellExtInit.Initialize');
-{$ENDIF}
+{$endif}
   Result := NOERROR;
 
   FFiles.Clear;
@@ -646,20 +642,20 @@ begin
     // Directory\Background object).
     if (DataObject <> nil) then
       with TFileDataFormat.Create(dfdConsumer) do
-      try
-        if GetData(DataObject) then
-          FFiles.Assign(Files);
-      finally
-        Free;
-      end;
+        try
+          if GetData(DataObject) then
+            FFiles.Assign(Files);
+        finally
+          Free;
+        end;
 
     if (Assigned(FOnPopup)) then
-    try
-      FOnPopup(Self);
-    except
-      Result := E_UNEXPECTED;
-      exit;
-    end;
+      try
+        FOnPopup(Self);
+      except
+        Result := E_UNEXPECTED;
+        exit;
+      end;
 
   finally
     FDataObject := nil;
@@ -714,7 +710,7 @@ function TDropContextMenu.ProcessMenuChar(Menu: HMenu; Shortcut: Char): integer;
     Result := 0;
     ItemIndex := 0;
 
-    for i := 0 to Menu.Count - 1 do
+    for i := 0 to Menu.Count-1 do
     begin
       if (not Menu[i].Visible) then
         Continue;
@@ -745,13 +741,13 @@ function TDropContextMenu.ProcessMenuChar(Menu: HMenu; Shortcut: Char): integer;
             ASSERT(SelectedItem = -1);
             SelectedItem := Index;
           end else
-            if (SelectedItem <> -1) then
-            begin
+          if (SelectedItem <> -1) then
+          begin
             // Multiple items - previous one was selected
-              NextItem := Index;
+            NextItem := Index;
             // No need to continue once we have First, Selected and Next item
-              exit;
-            end;
+            exit;
+          end;
         end;
       end;
       inc(Index);
@@ -888,7 +884,7 @@ procedure TDropContextMenu.DrawMenuItem(var DrawItemStruct: TDrawItemStruct);
 var
   ItemIndex: integer;
   MenuItem: TMenuItem;
-  Canvas: TCanvas;
+  Canvas: {$IF CompilerVersion >= 23.0}Vcl.Graphics.{$ifend}TCanvas;
   SaveIndex: Integer;
   Win98Plus: Boolean;
   State: TOwnerDrawState;
@@ -901,7 +897,7 @@ begin
   if (FContextMenu = nil) or (DrawItemStruct.CtlType <> ODT_MENU) then
     Exit;
 
-  ItemIndex := integer(DrawItemStruct.itemID - FMenuOffset);
+  ItemIndex := integer(DrawItemStruct.itemID-FMenuOffset);
   MenuItem := GetMenuItem(ItemIndex);
 
   // Make sure we aren't being passed an invalid item ID.
@@ -951,15 +947,15 @@ begin
           Canvas.Font.Color := clHighlightText;
           Exclude(State, odSelected);
         end else
-          if Win98Plus and (odInactive in State) then
-          begin
-            Canvas.Brush.Color := clMenu;
-            Canvas.Font.Color := clGrayText;
-          end else
-          begin
-            Canvas.Brush.Color := clMenu;
-            Canvas.Font.Color := clMenuText;
-          end;
+        if Win98Plus and (odInactive in State) then
+        begin
+          Canvas.Brush.Color := clMenu;
+          Canvas.Font.Color := clGrayText;
+        end else
+        begin
+          Canvas.Brush.Color := clMenu;
+          Canvas.Font.Color := clMenuText;
+        end;
 
         if ((MenuItem.Parent <> nil) and (MenuItem.Parent.Parent = nil)) and
           not ((MenuItem.GetParentMenu <> nil) and

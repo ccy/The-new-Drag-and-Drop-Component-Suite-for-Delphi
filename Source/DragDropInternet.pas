@@ -3,27 +3,31 @@ unit DragDropInternet;
 // Project:         New Drag and Drop Component Suite
 // Module:          DragDrop
 // Description:     Implements base classes and utility functions.
-// Version:         5.6
-// Date:            16-SEP-2014
-// Target:          Win32, Delphi 6-XE7
+// Version:         5.7
+// Date:            28-FEB-2015
+// Target:          Win32, Win64, Delphi 6-XE7
 // Authors:         Anders Melander, anders@melander.dk, http://melander.dk
 // Latest Version   https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 // Copyright        © 1997-1999 Angus Johnson & Anders Melander
 //                  © 2000-2010 Anders Melander
-//                  © 2011-2014 Sven Harazim
+//                  © 2011-2015 Sven Harazim
 // -----------------------------------------------------------------------------
 
 interface
 
 uses
+  {$IF CompilerVersion >= 23.0}
+  System.SysUtils,System.Classes,System.Win.ComObj,{$IF CompilerVersion >= 25.0}System.AnsiStrings,{$IFEND}
+  WinApi.Windows,WinApi.ShlObj,WinApi.ActiveX,
+  {$ELSE}
+  SysUtils,Classes,ComObj,
+  Windows,ShlObj,ActiveX,
+  {$ifend}
   DragDrop,
   DropTarget,
   DropSource,
   DragDropFormats,
-  DragDropText,
-  Windows,
-  Classes,{$IF CompilerVersion >= 25.0}AnsiStrings,{$IFEND}
-  ActiveX;
+  DragDropText;
 
 {$include DragDrop.inc}
 
@@ -409,9 +413,6 @@ procedure LoadMAPI32;
 implementation
 
 uses
-  SysUtils,
-  ShlObj,
-  ComObj,
   DragDropFile;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -471,7 +472,7 @@ begin
         begin
           s := AnsiString(URLFile[i]);
           p := PAnsiChar(s);
-          if ({$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrLIComp(p, 'URL=', length('URL=')) = 0) then
+          if ({$IF CompilerVersion >= 25.0}System.AnsiStrings.{$IFEND}StrLIComp(p, 'URL=', length('URL=')) = 0) then
           begin
             inc(p, length('URL='));
             URL := p;
@@ -696,12 +697,12 @@ end;
 function TNetscapeBookmarkClipboardFormat.WriteData(Value: pointer;
   Size: integer): boolean;
 begin
-  {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(FURL), Size);
+  {$IF CompilerVersion >= 25.0}System.AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(FURL), Size);
   dec(Size, 1024);
   if (Size > 0) and (FTitle <> '') then
   begin
     inc(PAnsiChar(Value), 1024);
-    {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(FTitle), Size);
+    {$IF CompilerVersion >= 25.0}System.AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(FTitle), Size);
   end;
   Result := True;
 end;
@@ -793,13 +794,13 @@ begin
     NetscapeImageRec^.Height := FHeight;
     inc(PByte(Value), SizeOf(TNetscapeImageRec));
     dec(Size, SizeOf(TNetscapeImageRec));
-    {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(FImage), Size);
+    {$IF CompilerVersion >= 25.0}System.AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(FImage), Size);
     dec(Size, Length(FImage)+1);
     if (Size <= 0) then
       exit;
     if (FLowRes <> '') then
     begin
-      {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(FLowRes), Size);
+      {$IF CompilerVersion >= 25.0}System.AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(FLowRes), Size);
       NetscapeImageRec^.OfsLowRes := integer(Value) - integer(NetscapeImageRec);
       dec(Size, Length(FLowRes)+1);
       inc(PByte(Value), Length(FLowRes)+1);
@@ -808,7 +809,7 @@ begin
     end;
     if (FTitle <> '') then
     begin
-      {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(FTitle), Size);
+      {$IF CompilerVersion >= 25.0}System.AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(FTitle), Size);
       NetscapeImageRec^.OfsTitle := integer(Value) - integer(NetscapeImageRec);
       dec(Size, Length(FTitle)+1);
       inc(PByte(Value), Length(FTitle)+1);
@@ -817,7 +818,7 @@ begin
     end;
     if (FUrl <> '') then
     begin
-      {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(FUrl), Size);
+      {$IF CompilerVersion >= 25.0}System.AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(FUrl), Size);
       NetscapeImageRec^.OfsUrl := integer(Value) - integer(NetscapeImageRec);
       dec(Size, Length(FUrl)+1);
       inc(PByte(Value), Length(FUrl)+1);
@@ -826,7 +827,7 @@ begin
     end;
     if (FExtra <> '') then
     begin
-      {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(FExtra), Size);
+      {$IF CompilerVersion >= 25.0}System.AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(FExtra), Size);
       NetscapeImageRec^.OfsExtra := integer(Value) - integer(NetscapeImageRec);
       dec(Size, Length(FExtra)+1);
       inc(PByte(Value), Length(FExtra)+1);
@@ -931,7 +932,7 @@ begin
   if (Result) then
   begin
     s := AnsiString(DOSStringToUnixString('begin:vcard'+#13+Items.Text+#13+'end:vcard'));
-    {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(s), Size);
+    {$IF CompilerVersion >= 25.0}System.AnsiStrings.{$IFEND}StrLCopy(Value, PAnsiChar(s), Size);
   end;
 end;
 
@@ -1185,7 +1186,7 @@ begin
       Filename := AnsiString(Title)
     else
       Filename := URL;
-    {$IF CompilerVersion >= 25.0}AnsiStrings.{$IFEND}StrPLCopy(@FGDA.fgd[0].cFileName[0], ConvertURLToFilename(Filename),
+    {$IF CompilerVersion >= 25.0}System.AnsiStrings.{$IFEND}StrPLCopy(@FGDA.fgd[0].cFileName[0], ConvertURLToFilename(Filename),
       SizeOf(FGDA.fgd[0].cFileName));
     FGDA.fgd[0].dwFlags := FD_LINKUI or FD_FILESIZE;
     FGDA.fgd[0].nFileSizeLow := Length(sInternetShortcut)+Length(URL)+8;
