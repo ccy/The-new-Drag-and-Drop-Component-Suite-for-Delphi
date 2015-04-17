@@ -27,7 +27,7 @@ interface
 
 uses
   {$IF CompilerVersion >= 23.0}
-  System.SysUtils,System.Classes,System.Win.ComObj,
+  System.SysUtils,System.Classes,System.Win.ComObj,System.Types,
   WinApi.Windows,WinApi.Messages,WinApi.ActiveX,WinApi.CommCtrl,
   Vcl.Controls,Vcl.Graphics,
   {$else}

@@ -19,7 +19,7 @@ interface
 
 uses
   {$IF CompilerVersion >= 23.0}
-  System.SysUtils,System.Classes,System.Win.ComObj,
+  System.SysUtils,System.Classes,System.Win.ComObj,System.Types,System.UITypes,
   WinApi.Windows,WinApi.ActiveX,Winapi.Messages,Winapi.CommCtrl,Winapi.ShlObj,
   Vcl.Controls,Vcl.Graphics,Vcl.ExtCtrls,Vcl.Forms,Vcl.ClipBrd,Vcl.ComCtrls,Vcl.Dialogs,
   {$ELSE}

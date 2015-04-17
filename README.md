@@ -22,7 +22,7 @@ https://github.com/DelphiPraxis/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 ## 1. Supported platforms
 This version of the library has been tested with Delphi 6, Delphi 7, Delphi 2007,
 Delphi 2009, Delphi 2010, Delphi XE, Delphi XE2, Delphi XE3, Delphi XE4, Delphi XE5,
-Delphi XE6, Delphi XE7 (Win32,Win64)
+Delphi XE6, Delphi XE7, Delphi XE8 (Win32,Win64)
 
 
 ## 2. Installation

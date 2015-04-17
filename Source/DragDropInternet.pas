@@ -1447,15 +1447,15 @@ begin
     MAPI32 := SafeLoadLibrary(MAPI32DLL);
     if (MAPI32 <= HINSTANCE_ERROR) then
       raise Exception.CreateFmt('%s: %s', [SysErrorMessage(GetLastError), MAPI32DLL]);
-    @MAPIGetDefaultMalloc := GetProcAddress(MAPI32, 'MAPIGetDefaultMalloc@0');
-    @MAPIInitialize := GetProcAddress(MAPI32, 'MAPIInitialize');
-    @MAPIUninitialize:= GetProcAddress(MAPI32, 'MAPIUninitialize');
-    @MAPIAllocateBuffer:= GetProcAddress(MAPI32, 'MAPIAllocateBuffer');
-    @MAPIAllocateMore := GetProcAddress(MAPI32, 'MAPIAllocateMore');
-    @MAPIFreeBuffer := GetProcAddress(MAPI32, 'MAPIFreeBuffer');
-    @OpenIMsgOnIStg := GetProcAddress(MAPI32, 'OpenIMsgOnIStg@44');
-    @OpenIMsgSession := GetProcAddress(MAPI32, 'OpenIMsgSession@12');
-    @CloseIMsgSession := GetProcAddress(MAPI32, 'CloseIMsgSession@4');
+    GetProc('MAPIGetDefaultMalloc@0', pointer( @MAPIGetDefaultMalloc));
+    GetProc('MAPIInitialize', pointer(@MAPIInitialize));
+    GetProc('MAPIUninitialize', pointer(@MAPIUninitialize));
+    GetProc('MAPIAllocateBuffer', pointer(@MAPIAllocateBuffer));
+    GetProc('MAPIAllocateMore', pointer(@MAPIAllocateMore));
+    GetProc('MAPIFreeBuffer', pointer(@MAPIFreeBuffer));
+    GetProc('OpenIMsgOnIStg@44', pointer(@OpenIMsgOnIStg));
+    GetProc('OpenIMsgSession@12', pointer(@OpenIMsgSession));
+    GetProc('CloseIMsgSession@4', pointer(@CloseIMsgSession));
   end;
 end;
 

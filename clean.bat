@@ -1,5 +1,6 @@
 del /q /s *.dcu
 del /q /s *.exe
+del /q /s *.dll
 del /q /s *.cbk
 del /q /s *.drc
 del /q /s *.dsk
@@ -35,6 +36,8 @@ rmdir /Q /S "Demos\PIDLDemo\__history"
 rmdir /Q /S "Demos\RTF\__history"
 rmdir /Q /S "Demos\ShellContextMenuHandler\__history"
 rmdir /Q /S "Demos\ShellContextMenuHandlerSimple\__history"
+rmdir /Q /S "Demos\ShellContextMenuHandlerSimple\Win32"
+rmdir /Q /S "Demos\ShellContextMenuHandlerSimple\Win64"
 rmdir /Q /S "Demos\ShellDragDropHandler\__history"
 rmdir /Q /S "Demos\ShellDropHandler\__history"
 rmdir /Q /S "Demos\SourceAnalyzer\__history"
@@ -64,6 +67,8 @@ rmdir /Q /S "DemosWithoutInstall\PIDLDemo\__history"
 rmdir /Q /S "DemosWithoutInstall\RTF\__history"
 rmdir /Q /S "DemosWithoutInstall\ShellContextMenuHandler\__history"
 rmdir /Q /S "DemosWithoutInstall\ShellContextMenuHandlerSimple\__history"
+rmdir /Q /S "DemosWithoutInstall\ShellContextMenuHandlerSimple\Win32"
+rmdir /Q /S "DemosWithoutInstall\ShellContextMenuHandlerSimple\Win64"
 rmdir /Q /S "DemosWithoutInstall\ShellDragDropHandler\__history"
 rmdir /Q /S "DemosWithoutInstall\ShellDropHandler\__history"
 rmdir /Q /S "DemosWithoutInstall\SourceAnalyzer\__history"

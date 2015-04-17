@@ -27,7 +27,6 @@ type
   *)
   TDataModuleContextMenuHandler = class(TDataModule, IUnknown, IShellExtInit,
     IContextMenu, IContextMenu2, IContextMenu3)
-    DropContextMenu1: TDropContextMenu;
     PopupMenu1: TPopupMenu;
     N1: TMenuItem;
     test1: TMenuItem;
@@ -53,8 +52,10 @@ type
     Followedbyaregularitem1: TMenuItem;
     Anthelastitem1: TMenuItem;
     procedure MenuTest1Click(Sender: TObject);
+    procedure DataModuleCreate(Sender: TObject);
   private
   protected
+    DropContextMenu1: TDropContextMenu;
   public
     // Aggregate IShellExtInit and IContextMenu* to the TDropContextMenu component.
     property ContextMenuHandler: TDropContextMenu read DropContextMenu1
@@ -106,6 +107,13 @@ const
 resourcestring
   // Description of our shell extension.
   sDescription = 'Drag and Drop Component Suite Simple Context Menu demo';
+
+procedure TDataModuleContextMenuHandler.DataModuleCreate(Sender: TObject);
+begin
+  DropContextMenu1 := TDropContextMenu.Create(Self);
+  DropContextMenu1.Name := 'DropContextMenu1';
+  DropContextMenu1.ContextMenu := PopupMenu1;
+end;
 
 procedure TDataModuleContextMenuHandler.MenuTest1Click(Sender: TObject);
 begin
