@@ -1,17 +1,17 @@
 The new Drag and Drop Component Suite for Delphi
 ================================================
 
-This component suite based on
-The Drag and Drop Component Suite for Delphi
-from Anders Melander  
-http://melander.dk/delphi/dragdrop/
+This component suite based on  
+The Drag and Drop Component Suite for Delphi  
+from Anders Melander    
+http://melander.dk/delphi/dragdrop  
 
-The new Drag and Drop Component Suite Version 5.7
-Released 28-feb-2015
-© 1997-2010 Anders Melander
-© 2011-2015 Sven Harazim
+The new Drag and Drop Component Suite Version 5.8  
+Released 21-apr-2015  
+© 1997-2010 Anders Melander  
+© 2011-2015 Sven Harazim  
 https://github.com/landrix/The-new-Drag-and-Drop-Component-Suite-for-Delphi  
-https://github.com/DelphiPraxis/The-new-Drag-and-Drop-Component-Suite-for-Delphi
+https://github.com/DelphiPraxis/The-new-Drag-and-Drop-Component-Suite-for-Delphi  
 
 ## Table of Contents
 1. Supported platforms
@@ -23,7 +23,6 @@ https://github.com/DelphiPraxis/The-new-Drag-and-Drop-Component-Suite-for-Delphi
 This version of the library has been tested with Delphi 6, Delphi 7, Delphi 2007,
 Delphi 2009, Delphi 2010, Delphi XE, Delphi XE2, Delphi XE3, Delphi XE4, Delphi XE5,
 Delphi XE6, Delphi XE7, Delphi XE8 (Win32,Win64)
-
 
 ## 2. Installation
 1. If you are using a previous version of the Drag and Drop Component Suite, uninstall that
@@ -38,7 +37,6 @@ Delphi XE6, Delphi XE7, Delphi XE8 (Win32,Win64)
    library search path.
 
 5. Optional: Add the Source folder to the Delphi browsing path.
-
 
 ## 3. Uninstallation
 1. Open Delphi and uninstall the Drag and Drop Component Suite design time package.
@@ -72,12 +70,12 @@ if (DragDetectPlus(reinterpret_cast<THandle>(Handle), Point(X, Y))) {
 * Virtual File Stream formats can only be pasted from the clipboard with live
   data (i.e. FlushClipboard/OleFlushClipboard hasn't been called on the data
   source). This problem affects TFileContentsStreamOnDemandClipboardFormat and
-  the VirtualFileStream demo.
+  the VirtualFileStream demo.  
   This is believed to be a bug in the Windows clipboard and a work around hasn't
   been found yet.
 
 * When TDropFileTarget.GetDataOnEnter is set to True, the component doesn't work
-  with WinZip.
+  with WinZip.  
   Although the file names are received correctly by TDropFileTarget, WinZip
   doesn't extract the files and the files thus can't be copied/moved.
   This is caused by a quirk in WinZip; Apparently WinZip doesn't like
@@ -87,15 +85,35 @@ if (DragDetectPlus(reinterpret_cast<THandle>(Handle), Point(X, Y))) {
 About
 =====
   
-The Drag and Drop Component Suite is a freeware VCL component library that enables your Delphi and C++Builder applications to support COM based drag and drop and integrate with the Windows clipboard.
+The Drag and Drop Component Suite is a freeware VCL component library that 
+enables your Delphi and C++Builder applications to support COM based drag and 
+drop and integrate with the Windows clipboard.
 
-The drag and drop system that is built into the VCL is limited in that it only supports drag and drop within the same application. If you need to drag data from your application to other applications (e.g. Word, Explorer or Outlook), or if you need to be able to accept data dropped from other application (e.g. the Explorer), you have to use COM based drag and drop. COM based drag and drop is an integral and very important part of the Windows user interface and the Drag and Drop Component Suite makes it very easy to leverage all the features of COM based drag and drop in your own Delphi and C++Builder applications.
+The drag and drop system that is built into the VCL is limited in that it 
+only supports drag and drop within the same application. If you need to drag 
+data from your application to other applications (e.g. Word, Explorer or Outlook), 
+or if you need to be able to accept data dropped from other application 
+(e.g. the Explorer), you have to use COM based drag and drop. COM based drag 
+and drop is an integral and very important part of the Windows user interface 
+and the Drag and Drop Component Suite makes it very easy to leverage all the 
+features of COM based drag and drop in your own Delphi and C++Builder applications.
 
-Every drag and drop operation involves two objects: A drop source and a drop target. The drop source provides the data to be dragged, and the drop target accepts the dragged data.
+Every drag and drop operation involves two objects: A drop source and a drop 
+target. The drop source provides the data to be dragged, and the drop target 
+accepts the dragged data.
 
-Likewise there are basically two sets of components in the Drag and Drop Component Suite; Drop source components and drop target components. Most of the source and target components are specialized to handle just one type of data, but a few of the components supports a wider range of data types or are completely generic.
+Likewise there are basically two sets of components in the Drag and Drop 
+Component Suite; Drop source components and drop target components. Most 
+of the source and target components are specialized to handle just one type 
+of data, but a few of the components supports a wider range of data types 
+or are completely generic.
 
-In addition to the drag and drop components, the Drag and Drop Component Suite also includes components that can be used to build Windows Shell Extensions. While these components arenâ€™t all related to Drag and Drop, they benefit from the Drag and Drop Component Suite framework and allow you to write Windows Shell Extensions with very little code. But most important; I had a lot of fun writing them :-).  
+In addition to the drag and drop components, the Drag and Drop Component 
+Suite also includes components that can be used to build Windows Shell 
+Extensions. While these components arenâ€™t all related to Drag and Drop, 
+they benefit from the Drag and Drop Component Suite framework and allow you 
+to write Windows Shell Extensions with very little code. But most important; 
+I had a lot of fun writing them :-).  
 
 Features
 --------
