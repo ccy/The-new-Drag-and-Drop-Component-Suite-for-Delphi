@@ -2277,7 +2277,7 @@ var
   Name: string;
   MemStream: TMemoryStream;
   StatStg: TStatStg;
-  Size: longInt;
+  Size: {$if CompilerVersion < 29}LongInt{$else}FixedUInt{$endif};
   Remaining: longInt;
   pChunk: PByte;
 begin
@@ -2345,7 +2345,7 @@ begin
           // have read data from the stream, so the next time we ask Outlook for
           // the same stream (e.g. by pasting the same attachment twice), we get
           // a stream where the current position is at EOS.
-          Stream.Seek(0, STREAM_SEEK_SET, PLargeint(nil)^);
+          Stream.Seek(0, STREAM_SEEK_SET, {$if CompilerVersion < 29}PLargeInt{$else}PUInt64{$endif}(nil)^);
 
           while (Remaining > 0) do
           begin
@@ -2359,7 +2359,7 @@ begin
           // We reset the stream position here just to be nice to other
           // applications which might not have work arounds for this problem
           // (e.g. Windows Explorer).
-          Stream.Seek(0, STREAM_SEEK_SET, PLargeint(nil)^);
+          Stream.Seek(0, STREAM_SEEK_SET, {$if CompilerVersion < 29}PLargeInt{$else}PUInt64{$endif}(nil)^);
 
           if (AFormatEtc.lindex > 0) then
             Name := FGD.Filenames[AFormatEtc.lindex-1];
@@ -2450,7 +2450,7 @@ var
   Index: integer;
   StatStg: TStatStg;
   Data: pointer;
-  ReadSize: longInt;
+  ReadSize: {$if CompilerVersion < 29}LongInt{$else}FixedUInt{$endif};
 begin
   Result := False;
   Index := AFormatEtcIn.lindex;
@@ -2491,7 +2491,7 @@ begin
             try
               Data := GlobalLock(AMedium.hGlobal);
               try
-                OleCheck(Stream.Seek(0, STREAM_SEEK_SET, PLargeint(nil)^));
+                OleCheck(Stream.Seek(0, STREAM_SEEK_SET, {$if CompilerVersion < 29}PLargeInt{$else}PUInt64{$endif}(nil)^));
                 OleCheck(Stream.Read(Data, StatStg.cbSize, @ReadSize));
                 Result := (ReadSize = StatStg.cbSize);
               finally

@@ -142,7 +142,7 @@ end;
 function DeleteEmptyRegKey(Key: string; DeleteTree: boolean = True): Boolean;
 var
   SubKey: HKey;
-  NumSubKeys, NumValues: {$IF CompilerVersion >= 25.0}CppULongInt{$ELSE}DWORD{$ifend};
+  NumSubKeys, NumValues: PDWORD;
   p: PChar;
 begin
   p := nil;
@@ -150,10 +150,13 @@ begin
     Result := False;
     if (RegOpenKey(HKEY_CLASSES_ROOT, PChar(Key), SubKey) = ERROR_SUCCESS) then
       try
-        Result := (RegQueryInfoKey(SubKey, nil, nil, nil, @NumSubKeys, nil, nil,
-          @NumValues, nil, nil, nil, nil) = ERROR_SUCCESS);
+        NumSubKeys := nil;
+        NumValues := nil;
+        Result := (RegQueryInfoKey(SubKey, nil, nil, nil, NumSubKeys, nil, nil,
+          NumValues, nil, nil, nil, nil) = ERROR_SUCCESS);
         // Only delete key if it doesn't contain values or sub keys.
-        Result := Result and (NumSubKeys = 0) and (NumValues = 0);
+        if (NumSubKeys <> nil) and (NumValues <> nil) then
+          Result := Result and (NumSubKeys^ = 0) and (NumValues^ = 0);
       finally
         RegCloseKey(SubKey);
       end;
