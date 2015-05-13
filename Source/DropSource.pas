@@ -718,7 +718,9 @@ begin
   begin
     DragBitmap := TBitmap.Create;
     try
+      // see http://msdn.microsoft.com/en-us/library/windows/desktop/bb759778%28v=vs.85%29.aspx
       DragBitmap.PixelFormat := pfDevice;
+      DragBitmap.AlphaFormat := afDefined; // make sure alpha channel is not pre-multiplied
 
       // TImageList.GetBitmap uses TImageList.Draw to extract the bitmap so we
       // must clear the destination bitmap before extraction.
@@ -727,25 +729,27 @@ begin
       DragBitmap.Canvas.FillRect(DragBitmap.Canvas.ClipRect);
       Images.GetBitmap(ImageIndex, DragBitmap);
       shDragImage.crColorKey := GetRGBColor(Images.BkColor);
-
-      shDragImage.hbmpDragImage := DragBitmap.Handle;
       shDragImage.sizeDragImage.cx := DragBitmap.Width;
       shDragImage.sizeDragImage.cy := DragBitmap.Height;
       shDragImage.ptOffset.x := ImageHotSpotX;
       shDragImage.ptOffset.y := ImageHotSpotY;
-
-      if (Succeeded(DragSourceHelper.InitializeFromBitmap(shDragImage, Self))) then
-      begin
-        // Apparently the bitmap is now owned by the drag/drop image handler...
-        // The documentation doesn't mention this explicitly, but the
-        // implemtation of Microsoft's SDK samples suggests that this is the
-        // case.
-        DragBitmap.ReleaseHandle;
-        Result := True;
-      end;
+      shDragImage.hbmpDragImage := DragBitmap.ReleaseHandle;
     finally
+      // Bitmap must not be bound to a device context before calling
+      // InitializeFromBitmap and device context must be freed.
       DragBitmap.Free;
+      // The bitmap itself still lives in shDragImage.hbmpDragImage
     end;
+
+    if (Succeeded(DragSourceHelper.InitializeFromBitmap(shDragImage, Self))) then
+    begin
+      // Apparently the bitmap is now owned by the drag/drop image handler...
+      // The documentation doesn't mention this explicitly, but the
+      // implemtation of Microsoft's SDK samples suggests that this is the
+      // case.
+      Result := True;
+    end else
+      DeleteObject(shDragImage.hbmpDragImage);
   end;
 end;
 
