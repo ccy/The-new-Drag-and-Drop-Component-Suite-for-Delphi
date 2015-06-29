@@ -3,10 +3,10 @@
         <ProjectGuid>{7F7DC9A7-17E6-459E-BE1D-B40495F79F47}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="DragDropDXE7.dproj">
+        <Projects Include="DragDropDXE8.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="dclDragDropDXE7.dproj">
+        <Projects Include="dclDragDropDXE8.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -17,32 +17,32 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="DragDropDXE7">
-        <MSBuild Projects="DragDropDXE7.dproj"/>
+    <Target Name="DragDropDXE8">
+        <MSBuild Projects="DragDropDXE8.dproj"/>
     </Target>
-    <Target Name="DragDropDXE7:Clean">
-        <MSBuild Projects="DragDropDXE7.dproj" Targets="Clean"/>
+    <Target Name="DragDropDXE8:Clean">
+        <MSBuild Projects="DragDropDXE8.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="DragDropDXE7:Make">
-        <MSBuild Projects="DragDropDXE7.dproj" Targets="Make"/>
+    <Target Name="DragDropDXE8:Make">
+        <MSBuild Projects="DragDropDXE8.dproj" Targets="Make"/>
     </Target>
-    <Target Name="dclDragDropDXE7">
-        <MSBuild Projects="dclDragDropDXE7.dproj"/>
+    <Target Name="dclDragDropDXE8">
+        <MSBuild Projects="dclDragDropDXE8.dproj"/>
     </Target>
-    <Target Name="dclDragDropDXE7:Clean">
-        <MSBuild Projects="dclDragDropDXE7.dproj" Targets="Clean"/>
+    <Target Name="dclDragDropDXE8:Clean">
+        <MSBuild Projects="dclDragDropDXE8.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="dclDragDropDXE7:Make">
-        <MSBuild Projects="dclDragDropDXE7.dproj" Targets="Make"/>
+    <Target Name="dclDragDropDXE8:Make">
+        <MSBuild Projects="dclDragDropDXE8.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="DragDropDXE7;dclDragDropDXE7"/>
+        <CallTarget Targets="DragDropDXE8;dclDragDropDXE8"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DragDropDXE7:Clean;dclDragDropDXE7:Clean"/>
+        <CallTarget Targets="DragDropDXE8:Clean;dclDragDropDXE8:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DragDropDXE7:Make;dclDragDropDXE7:Make"/>
+        <CallTarget Targets="DragDropDXE8:Make;dclDragDropDXE8:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

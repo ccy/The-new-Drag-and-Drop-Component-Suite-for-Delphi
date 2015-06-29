@@ -31,8 +31,8 @@
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
         <DCC_IOChecking>false</DCC_IOChecking>
-        <DCC_DcpOutput>..\Library\DXE7\$(Platform)_$(Config)</DCC_DcpOutput>
-        <DCC_DcuOutput>..\Library\DXE7\$(Platform)_$(Config)</DCC_DcuOutput>
+        <DCC_DcpOutput>..\Library\DXE8\$(Platform)_$(Config)</DCC_DcpOutput>
+        <DCC_DcuOutput>..\Library\DXE8\$(Platform)_$(Config)</DCC_DcuOutput>
         <DCC_DebugInformation>1</DCC_DebugInformation>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=;CFBundleName=</VerInfo_Keys>
         <DesignOnlyPackage>true</DesignOnlyPackage>
@@ -43,7 +43,7 @@
         <DCC_RangeChecking>true</DCC_RangeChecking>
         <DCC_Alignment>4</DCC_Alignment>
         <VerInfo_Locale>1031</VerInfo_Locale>
-        <DCC_UnitSearchPath>..\Library\DXE7\$(Platform)_$(Config);$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>..\Library\DXE8\$(Platform)_$(Config);$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_ImageBase>00456789</DCC_ImageBase>
         <DCC_Description>Drag and Drop Component Suite</DCC_Description>
         <DCC_Define>DESIGNTIME;$(DCC_Define)</DCC_Define>
@@ -93,7 +93,7 @@
         <DCCReference Include="..\Source\DropSource.dcr"/>
         <DCCReference Include="..\Source\DropTarget.dcr"/>
         <DCCReference Include="designide.dcp"/>
-        <DCCReference Include="DragDropDXE7.dcp"/>
+        <DCCReference Include="DragDropDXE8.dcp"/>
         <DCCReference Include="..\Source\DragDropDesign.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

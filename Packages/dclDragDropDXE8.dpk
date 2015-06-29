@@ -44,7 +44,7 @@ package dclDragDropDXE8;
 
 requires
   designide,
-  DragDropDXE7;
+  DragDropDXE8;
 
 contains
   DragDropDesign in '..\Source\DragDropDesign.pas';
